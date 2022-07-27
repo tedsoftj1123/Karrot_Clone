@@ -1,5 +1,7 @@
-package com.example.karrotmarket.security;
+package com.example.karrotmarket.global.security;
 
+import com.example.karrotmarket.global.security.jwt.JwtTokenFilter;
+import com.example.karrotmarket.global.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
