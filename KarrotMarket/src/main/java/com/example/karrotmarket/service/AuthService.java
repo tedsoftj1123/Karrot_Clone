@@ -1,8 +1,8 @@
 package com.example.karrotmarket.service;
 
 import com.example.karrotmarket.controller.dto.TokenDto;
-import com.example.karrotmarket.controller.dto.req.LoginDto;
-import com.example.karrotmarket.controller.dto.req.SignupDto;
+import com.example.karrotmarket.controller.dto.req.LoginRequest;
+import com.example.karrotmarket.controller.dto.req.SignupRequest;
 import com.example.karrotmarket.controller.dto.req.TokenRequestDto;
 import com.example.karrotmarket.controller.dto.res.MemberResponseDto;
 import com.example.karrotmarket.domain.Member;
@@ -29,14 +29,14 @@ public class AuthService {
     private final JwtTokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    public MemberResponseDto signup(SignupDto req) {
+    public MemberResponseDto signup(SignupRequest req) {
         validateDuplicateMember(req.getMemberEmail());
 
         Member member = req.toMember(passwordEncoder);
         return MemberResponseDto.of(memberRepository.save(member));
     }
 
-    public TokenDto login(LoginDto req) {
+    public TokenDto login(LoginRequest req) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(req.getEmail(), req.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         TokenDto tokenDto = tokenProvider.createToken(authentication);

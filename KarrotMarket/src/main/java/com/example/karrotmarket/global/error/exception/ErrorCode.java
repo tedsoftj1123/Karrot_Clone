@@ -7,7 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorCode {
     USER_ALREADY_EXISTS(409, "User Already Exists"),
-    USER_NOT_FOUND(404, "User not fund")
+    USER_NOT_FOUND(404, "User not fund"),
+    TOKEN_INVALID(401, "Token is Invalid")
     ;
 
     private final int status;
