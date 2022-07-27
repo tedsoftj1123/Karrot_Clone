@@ -5,6 +5,7 @@ import com.example.karrotmarket.global.error.exception.ErrorCode;
 import com.fasterxml.jackson.databind.ser.Serializers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,5 +24,10 @@ public class GlobalExceptionHandler {
                         .build(),
                 HttpStatus.valueOf(errorCode.getStatus())
         );
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity<ErrorResponse> handleValidException(MethodArgumentNotValidException e) {
+        return new ResponseEntity<>(new ErrorResponse(400, e.getBindingResult().getAllErrors().get(0).getDefaultMessage(), ZonedDateTime.now()), HttpStatus.valueOf(400));
     }
 }

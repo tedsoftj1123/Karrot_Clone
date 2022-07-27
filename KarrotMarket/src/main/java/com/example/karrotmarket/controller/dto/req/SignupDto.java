@@ -8,13 +8,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.persistence.Embeddable;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class SignupDto {
+    @NotBlank(message = "id는 공백이나 뛰어쓰기를 허용하지 않습니다.")
     private String memberId;
+
+    @NotBlank(message = "name은 공백이나 뛰어쓰기를 허용하지 않습니다.")
     private String memberName;
+
+    @NotBlank(message = "email는 공백이나 뛰어쓰기를 허용하지 않습니다.")
+    @Email(message = "잘못된 email형식입니다.")
     private String memberEmail;
+
+    @NotBlank(message = "password는 공백이나 뛰어쓰기를 허용하지 않습니다.")
     private String memberPassword;
     private Address address;
     public Member toMember(PasswordEncoder passwordEncoder) {
