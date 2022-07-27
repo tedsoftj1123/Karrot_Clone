@@ -1,14 +1,14 @@
 package com.example.karrotmarket.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Member {
@@ -19,6 +19,10 @@ public class Member {
 
     private String memberName;
 
+    private String memberEmail;
+
+    private String memberPassword;
+
     @Embedded
     private Address address;
 
@@ -28,6 +32,6 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<DealRequest> dealRequests = new ArrayList<>();
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    List<Role> roles = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }
