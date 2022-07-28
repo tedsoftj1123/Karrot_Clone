@@ -1,6 +1,5 @@
 package com.example.karrotmarket.global.security.jwt;
 
-import com.example.karrotmarket.global.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

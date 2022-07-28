@@ -1,16 +1,13 @@
 package com.example.karrotmarket.global.error;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.ZonedDateTime;
 
 @Getter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class ErrorResponse {
     private int status;
     private String message;
