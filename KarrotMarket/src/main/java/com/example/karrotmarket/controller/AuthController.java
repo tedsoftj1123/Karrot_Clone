@@ -1,8 +1,8 @@
 package com.example.karrotmarket.controller;
 
 import com.example.karrotmarket.controller.dto.TokenDto;
-import com.example.karrotmarket.controller.dto.req.LoginDto;
-import com.example.karrotmarket.controller.dto.req.SignupDto;
+import com.example.karrotmarket.controller.dto.req.LoginRequest;
+import com.example.karrotmarket.controller.dto.req.SignupRequest;
 import com.example.karrotmarket.controller.dto.req.TokenRequestDto;
 import com.example.karrotmarket.controller.dto.res.MemberResponseDto;
 import com.example.karrotmarket.service.AuthService;
@@ -20,12 +20,12 @@ public class AuthController {
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    public MemberResponseDto signup(@Valid @RequestBody SignupDto req) {
+    public MemberResponseDto signup(@Valid @RequestBody SignupRequest req) {
         return authService.signup(req);
     }
 
     @PostMapping("/login")
-    public TokenDto login(@RequestBody LoginDto loginDto) {
+    public TokenDto login(@RequestBody LoginRequest loginDto) {
         return authService.login(loginDto);
     }
 
