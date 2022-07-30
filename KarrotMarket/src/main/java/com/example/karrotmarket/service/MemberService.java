@@ -1,5 +1,6 @@
 package com.example.karrotmarket.service;
 
+import com.example.karrotmarket.controller.dto.res.DealRequestResponse;
 import com.example.karrotmarket.controller.dto.res.ItemResponse;
 import com.example.karrotmarket.controller.dto.res.MyPageResponse;
 import com.example.karrotmarket.domain.Member;
@@ -18,7 +19,14 @@ public class MemberService {
 
     public MyPageResponse my() {
         Member member = memberFacade.getCurrentUser();
-
+        List<DealRequestResponse> memberDealRequests = member.getDealRequests().stream()
+                .map(dealRequest -> DealRequestResponse.builder()
+                        .dealMember(dealRequest.getDealMember())
+                        .day(dealRequest.getDay())
+                        .location(dealRequest.getLocation())
+                        .price(dealRequest.getPrice())
+                        .build()
+                ).collect(Collectors.toList());
         List<ItemResponse> memberItems = member.getItems().stream()
                 .map(
                         item -> ItemResponse.builder()
@@ -36,7 +44,7 @@ public class MemberService {
                 .memberEmail(member.getMemberEmail())
                 .memberAddress(member.getAddress())
                 .memberItems(memberItems)
-                .memberDealRequests(member.getDealRequests())
+                .memberDealRequests(memberDealRequests)
                 .build();
     }
 }

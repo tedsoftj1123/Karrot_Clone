@@ -12,15 +12,15 @@ import java.util.List;
 @Getter @Builder
 @AllArgsConstructor
 public class MyPageResponse {
-    private String memberId;
+    private final String memberId;
 
-    private String memberEmail;
+    private final String memberEmail;
 
-    private String memberName;
+    private final String memberName;
 
-    private Address memberAddress;
+    private final Address memberAddress;
 
-    private List<Item> memberItems;
+    private final List<ItemResponse> memberItems;
 
-    private List<DealRequest> memberDealRequests;
+    private final List<DealRequestResponse> memberDealRequests;
 }
