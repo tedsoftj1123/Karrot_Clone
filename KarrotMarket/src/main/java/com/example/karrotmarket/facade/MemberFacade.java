@@ -1,9 +1,7 @@
 package com.example.karrotmarket.facade;
 
 import com.example.karrotmarket.domain.Member;
-import com.example.karrotmarket.global.exception.TokenInvalidException;
 import com.example.karrotmarket.global.exception.UserNotFoundException;
-import com.example.karrotmarket.global.security.auth.AuthDetails;
 import com.example.karrotmarket.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;

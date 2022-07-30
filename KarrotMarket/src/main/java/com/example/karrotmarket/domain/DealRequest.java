@@ -1,14 +1,14 @@
 package com.example.karrotmarket.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.DayOfWeek;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DealRequest {
     @Id @GeneratedValue
@@ -29,5 +29,6 @@ public class DealRequest {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    private String dealMember;
 
 }
