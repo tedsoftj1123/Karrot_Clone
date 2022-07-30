@@ -1,2 +1,14 @@
-package com.example.karrotmarket.controller.dto.res;public class AddItemResponse {
+package com.example.karrotmarket.controller.dto.res;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@Builder
+@AllArgsConstructor
+public class AddItemResponse {
+    private final String itemName;
+    private final String memberName;
 }
