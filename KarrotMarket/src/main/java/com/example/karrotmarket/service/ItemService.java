@@ -2,6 +2,7 @@ package com.example.karrotmarket.service;
 
 import com.example.karrotmarket.controller.dto.req.ItemRequest;
 import com.example.karrotmarket.controller.dto.res.AddItemResponse;
+import com.example.karrotmarket.controller.dto.res.ShowAllItemsResponse;
 import com.example.karrotmarket.domain.Item;
 import com.example.karrotmarket.domain.ItemStatus;
 import com.example.karrotmarket.domain.Member;
@@ -11,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,4 +40,17 @@ public class ItemService {
                 .memberName(member.getMemberName())
                 .build();
     }
+
+    public List<ShowAllItemsResponse> main() {
+        return itemRepository.findAll().stream().map(
+                item -> ShowAllItemsResponse.builder()
+                        .itemName(item.getItemName())
+                        .location(item.getMember().getAddress().getDong())
+                        .price(item.getPrice())
+                        .displayTime(item.getCreatedAt())
+                        .build()
+        ).collect(Collectors.toList());
+    }
+
+    public
 }
