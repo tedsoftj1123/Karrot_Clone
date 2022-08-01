@@ -11,6 +11,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @Builder @Getter
 public class ShowAllItemsResponse {
+    private final Long itemId;
     private final String itemName;
     private final String location;
     private final LocalDateTime displayTime;
