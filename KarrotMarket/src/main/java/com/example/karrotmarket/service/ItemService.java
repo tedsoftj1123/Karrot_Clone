@@ -12,23 +12,26 @@ import com.example.karrotmarket.global.exception.ItemNotExistsException;
 import com.example.karrotmarket.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ItemService {
     private final ItemRepository itemRepository;
     private final MemberFacade memberFacade;
 
+    @Transactional
     public AddItemResponse addItem(ItemRequest req) {
         Member member = memberFacade.getCurrentUser();
         itemRepository.save(
                 Item.builder()
                         .itemName(req.getItemName())
+                        .category(req.getItemCategory())
                         .itemDescription(req.getItemDescription())
                         .canNegotiate(req.isCanNego())
                         .itemStatus(ItemStatus.SALE)
@@ -46,8 +49,7 @@ public class ItemService {
     public List<ShowAllItemsResponse> main() {
         return itemRepository.findAll().stream()
                 .filter(i -> i.getItemStatus().equals(ItemStatus.SALE))
-                .map(
-                item -> ShowAllItemsResponse.builder()
+                .map(item -> ShowAllItemsResponse.builder()
                         .itemId(item.getId())
                         .itemName(item.getItemName())
                         .location(item.getMember().getAddress().getDong())

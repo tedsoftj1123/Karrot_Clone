@@ -24,8 +24,14 @@ public class Item {
 
     private boolean canNegotiate;
 
+    private int hits;
+
     @Enumerated(EnumType.STRING)
     private ItemStatus itemStatus;
+
+    @Enumerated(EnumType.STRING)
+    private Category category;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
