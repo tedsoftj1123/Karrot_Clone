@@ -5,6 +5,7 @@ import com.example.karrotmarket.domain.DealRequest;
 import com.example.karrotmarket.domain.Item;
 import com.example.karrotmarket.domain.Member;
 import com.example.karrotmarket.facade.MemberFacade;
+import com.example.karrotmarket.global.exception.CannotNegoException;
 import com.example.karrotmarket.global.exception.ItemNotExistsException;
 import com.example.karrotmarket.repository.DealRequestRepository;
 import com.example.karrotmarket.repository.ItemRepository;
@@ -21,6 +22,9 @@ public class DealRequestService {
         Member member = memberFacade.getCurrentUser();
         Item item = itemRepository.findById(todoId)
                 .orElseThrow(ItemNotExistsException::new);
+        if(req.negoCheck(item.isCanNegotiate())){
+            throw new CannotNegoException();
+        }
         dealRequestRepository.save(
                 DealRequest.builder()
                         .item(item)
