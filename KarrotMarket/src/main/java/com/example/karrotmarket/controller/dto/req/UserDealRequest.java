@@ -10,5 +10,9 @@ import java.time.DayOfWeek;
 public class UserDealRequest {
     private DayOfWeek day;
     private String location;
-    private int price;
+    private Integer price;
+
+    public boolean negoCheck(boolean canNego) {
+        return !canNego && !price.equals(0);
+    }
 }
