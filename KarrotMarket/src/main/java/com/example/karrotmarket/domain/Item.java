@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -24,8 +26,6 @@ public class Item {
 
     private boolean canNegotiate;
 
-    private int hits;
-
     @Enumerated(EnumType.STRING)
     private ItemStatus itemStatus;
 
@@ -36,5 +36,10 @@ public class Item {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @OneToMany(mappedBy = "item")
+    private List<Hits> hits = new ArrayList<>();
+
+    @OneToMany(mappedBy = "item")
+    private List<Heart> likeCount = new ArrayList<>();
 
 }

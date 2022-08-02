@@ -6,6 +6,7 @@ import com.example.karrotmarket.controller.dto.res.ItemDetailResponse;
 import com.example.karrotmarket.controller.dto.res.ShowAllItemsResponse;
 import com.example.karrotmarket.service.ItemService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class ItemController {
     private final ItemService itemService;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public AddItemResponse addItem(@RequestBody ItemRequest itemRequest) {
         return itemService.addItem(itemRequest);
     }

@@ -17,4 +17,5 @@ public class ShowAllItemsResponse {
     private final LocalDateTime displayTime;
     private final int price;
     private final int likeCount;
+    private final int hits;
 }
