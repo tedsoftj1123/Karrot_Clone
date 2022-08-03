@@ -32,6 +32,9 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<DealRequest> dealRequests = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member")
+    private List<Heart> hearts = new ArrayList<>();
+
     @Enumerated(EnumType.STRING)
     private Role role;
 }

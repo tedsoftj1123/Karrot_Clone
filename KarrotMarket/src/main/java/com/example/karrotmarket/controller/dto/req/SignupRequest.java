@@ -27,8 +27,6 @@ public class SignupRequest {
 
     @NotBlank(message = "password는 공백이나 뛰어쓰기를 허용하지 않습니다.")
     private String memberPassword;
-
-    @NotBlank(message = "address는 공백을 허용하지 않습니다.")
     private Address address;
     public Member toMember(PasswordEncoder passwordEncoder) {
         return Member.builder()
