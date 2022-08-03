@@ -21,7 +21,7 @@ public class DealRequest {
     @Enumerated(EnumType.STRING)
     private DayOfWeek day;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private Item item;
 

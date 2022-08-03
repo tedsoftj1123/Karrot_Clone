@@ -19,5 +19,5 @@ public class ShowAllItemsResponse {
     /*private LocalDateTime displayTime;*/
     private int price;
     private int likeCount;
-    private int hits;
+    private int itemDealRequestCount;
 }

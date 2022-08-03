@@ -62,7 +62,7 @@ public class ItemService {
                         .location(item.getMember().getAddress().getDong())
                         .price(item.getPrice())
                         /*.displayTime(item.getCreatedAt())*/
-                        .hits(item.getHits().size())
+                        .itemDealRequestCount(item.getDealRequestCount())
                         .likeCount(item.getLikeCount().size())
                         .build()
         ).collect(Collectors.toList());

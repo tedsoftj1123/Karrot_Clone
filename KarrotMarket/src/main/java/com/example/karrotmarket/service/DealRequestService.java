@@ -25,6 +25,7 @@ public class DealRequestService {
         if(req.negoCheck(item.isCanNegotiate())){
             throw new CannotNegoException();
         }
+        item.addDealRequestCount();
         dealRequestRepository.save(
                 DealRequest.builder()
                         .item(item)
