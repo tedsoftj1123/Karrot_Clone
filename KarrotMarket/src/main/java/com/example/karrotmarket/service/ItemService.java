@@ -69,7 +69,6 @@ public class ItemService {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(ItemNotExistsException::new);
         if(!hitsRepository.existsByMemberIdAndItem(member.getId(), item)) {
-            System.out.println("asdf");
             hitsRepository.save(
                     Hits.builder()
                             .memberId(member.getId())
