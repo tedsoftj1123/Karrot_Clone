@@ -13,6 +13,7 @@ import com.example.karrotmarket.global.exception.ItemNotExistsException;
 import com.example.karrotmarket.repository.HitsRepository;
 import com.example.karrotmarket.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +31,7 @@ public class ItemService {
     private final HitsRepository hitsRepository;
 
     @Transactional
+    @CacheEvict(value = "items", allEntries = true, cacheManager = "testCacheManager")
     public AddItemResponse addItem(ItemRequest req) {
         Member member = memberFacade.getCurrentUser();
         itemRepository.save(
