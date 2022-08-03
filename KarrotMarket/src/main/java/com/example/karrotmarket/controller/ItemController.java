@@ -6,6 +6,7 @@ import com.example.karrotmarket.controller.dto.res.ItemDetailResponse;
 import com.example.karrotmarket.controller.dto.res.ShowAllItemsResponse;
 import com.example.karrotmarket.service.ItemService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

@@ -13,6 +13,7 @@ import com.example.karrotmarket.global.exception.ItemNotExistsException;
 import com.example.karrotmarket.repository.HitsRepository;
 import com.example.karrotmarket.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +50,7 @@ public class ItemService {
                 .build();
     }
 
+    @Cacheable(value = "items", cacheManager = "testCacheManager")
     public List<ShowAllItemsResponse> main() {
         return itemRepository.findAll().stream()
                 .filter(i -> i.getItemStatus().equals(ItemStatus.SALE))
@@ -57,13 +59,14 @@ public class ItemService {
                         .itemName(item.getItemName())
                         .location(item.getMember().getAddress().getDong())
                         .price(item.getPrice())
-                        .displayTime(item.getCreatedAt())
+                        /*.displayTime(item.getCreatedAt())*/
                         .hits(item.getHits().size())
                         .likeCount(item.getLikeCount().size())
                         .build()
         ).collect(Collectors.toList());
     }
     @Transactional
+    @Cacheable(value = "ItemDetailResponse", key = "#itemId", cacheManager = "testCacheManager")
     public ItemDetailResponse itemDetail(Long itemId) {
         Member member = memberFacade.getCurrentUser();
         Item item = itemRepository.findById(itemId)

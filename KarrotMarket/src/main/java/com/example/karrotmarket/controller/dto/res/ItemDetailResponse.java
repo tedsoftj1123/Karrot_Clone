@@ -4,18 +4,20 @@ import com.example.karrotmarket.domain.Category;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder @Getter
 public class ItemDetailResponse {
-    private final String memberName;
-    private final String memberLocation;
+    private String memberName;
+    private String memberLocation;
 
-    private final String itemName;
-    private final String itemDescription;
-    private final int likeCount;
-    private final Category itemCategory;
-    private final int hits;
-    private final int price;
+    private String itemName;
+    private String itemDescription;
+    private int likeCount;
+    private Category itemCategory;
+    private int hits;
+    private int price;
 
 }
