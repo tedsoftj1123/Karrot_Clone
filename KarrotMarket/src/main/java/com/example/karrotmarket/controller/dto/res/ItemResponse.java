@@ -16,4 +16,5 @@ public class ItemResponse {
     private int price;
     private boolean canNego;
     private ItemStatus itemStatus;
+
 }

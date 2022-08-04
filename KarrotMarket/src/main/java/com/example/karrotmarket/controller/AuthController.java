@@ -1,6 +1,7 @@
 package com.example.karrotmarket.controller;
 
-import com.example.karrotmarket.controller.dto.TokenDto;
+import com.example.karrotmarket.controller.dto.res.TokenRefreshResponse;
+import com.example.karrotmarket.controller.dto.res.TokenResponse;
 import com.example.karrotmarket.controller.dto.req.LoginRequest;
 import com.example.karrotmarket.controller.dto.req.SignupRequest;
 import com.example.karrotmarket.controller.dto.req.TokenRequestDto;
@@ -25,12 +26,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public TokenDto login(@RequestBody LoginRequest loginDto) {
+    public TokenResponse login(@RequestBody LoginRequest loginDto) {
         return authService.login(loginDto);
     }
 
-    @PostMapping("/reissue")
-    public TokenDto reissue(@RequestBody TokenRequestDto tokenRequestDto) {
-        return authService.reissue(tokenRequestDto);
+    @PutMapping("/reissue")
+    public TokenRefreshResponse reissue(@RequestHeader("Refresh-Token") String token) {
+        return authService.reissue(token);
     }
 }

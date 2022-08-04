@@ -1,5 +1,6 @@
 package com.example.karrotmarket.controller.dto.res;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.datatype.jdk8.OptionalIntDeserializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,8 +17,9 @@ public class ShowAllItemsResponse {
     private Long itemId;
     private String itemName;
     private String location;
-    /*private LocalDateTime displayTime;*/
     private int price;
     private int likeCount;
     private int itemDealRequestCount;
+
+
 }
