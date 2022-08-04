@@ -1,100 +1,84 @@
 package com.example.karrotmarket.global.security.jwt;
 
 
-import com.example.karrotmarket.controller.dto.TokenDto;
+import com.example.karrotmarket.domain.RefreshToken;
+import com.example.karrotmarket.global.exception.InvalidJwtException;
+import com.example.karrotmarket.global.security.auth.AuthDetailsService;
+import com.example.karrotmarket.repository.RefreshTokenRepository;
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
-import java.security.Key;
-import java.util.Arrays;
-import java.util.Collection;
+import javax.servlet.http.HttpServletRequest;
+import java.time.ZonedDateTime;
 import java.util.Date;
-import java.util.stream.Collectors;
 
 @Component
-@Slf4j
+@RequiredArgsConstructor
 public class JwtTokenProvider {
-    private static final String AUTHORITIES_KEY = "auth";
-    private static final String BEARER_TYPE = "bearer";
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;
+    private final AuthDetailsService authDetailsService;
+    private final JwtProperties jwtProperties;
+    private final RefreshTokenRepository refreshTokenRepository;
 
-    private final Key key;
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
-        byte[] keyByes = Decoders.BASE64.decode(secretKey);
-        this.key = Keys.hmacShaKeyFor(keyByes);
+    public String generateAccessToken(String uid) {
+        return generateToken(uid, "access", jwtProperties.getAccessExp());
+    }
+    public String generateRefreshToken(String uid) {
+        String refresh = generateToken(uid, "refresh", jwtProperties.getRefreshExp());
+        refreshTokenRepository.save(
+                RefreshToken.builder()
+                        .key(uid)
+                        .value(refresh)
+                        .build()
+        );
+        return refresh;
     }
 
-    public TokenDto createToken(Authentication authentication) {
-        String authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
-        long now = (new Date()).getTime();
-
-        Date accessTokenExpiresIn = new Date(now+ACCESS_TOKEN_EXPIRE_TIME);
-        String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())
-                .claim(AUTHORITIES_KEY, authorities)
-                .setExpiration(accessTokenExpiresIn)
-                .signWith(key, SignatureAlgorithm.HS256)
+    private String generateToken(String uid, String type, Long exp) {
+        return Jwts.builder()
+                .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
+                .setSubject(uid)
+                .claim("type", type)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + exp * 1000))
                 .compact();
-        String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
-
-        return TokenDto.builder()
-                .grantType(BEARER_TYPE)
-                .accessToken(accessToken)
-                .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
-                .refreshToken(refreshToken)
-                .build();
     }
 
-    public Authentication getAuthentication(String accessToken) {
-        Claims claims = parseClaims(accessToken);
-        if(claims.get(AUTHORITIES_KEY) == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
+    public String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader(jwtProperties.getHeader());
+        System.out.println(bearerToken);
+        if (bearerToken != null && bearerToken.startsWith(jwtProperties.getPrefix())) {
+            return bearerToken.substring(7);
         }
-
-        Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
-        UserDetails principal = new User(claims.getSubject(), "", authorities);
-        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+        return null;
     }
 
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            return true;
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("잘못된 JWT 서명입니다.");
-        } catch (ExpiredJwtException e) {
-            log.info("만료된 JWT 토큰입니다.");
-        } catch (UnsupportedJwtException e) {
-            log.info("지원되지 않는 JWT 토큰입니다.");
-        } catch (IllegalArgumentException e) {
-            log.info("JWT 토큰이 잘못되었습니다.");
-        }
-        return false;
+    public ZonedDateTime getExpiredTime() {
+        return ZonedDateTime.now().plusSeconds(jwtProperties.getAccessExp());
     }
-    private Claims parseClaims(String accessToken) {
+
+    public Authentication getAuthentication(String token) {
+        UserDetails userDetails = authDetailsService
+                .loadUserByUsername(this.getUserPk(token));
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
+
+    public String getUserPk(String token) {
+        return Jwts.parser().setSigningKey(jwtProperties.getSecretKey()).parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public boolean validateToken(String jwtToken) {
         try {
-            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
-        } catch (ExpiredJwtException e) {
-            return e.getClaims();
+            Jws<Claims> claims = Jwts.parser().setSigningKey(jwtProperties.getSecretKey()).parseClaimsJws(jwtToken);
+            return !claims.getBody().getExpiration().before(new Date());
+        } catch (io.jsonwebtoken.ExpiredJwtException e) {
+            throw new com.example.karrotmarket.global.exception.ExpiredJwtException();
+        } catch (Exception e) {
+            throw new InvalidJwtException();
         }
     }
 }

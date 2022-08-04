@@ -12,7 +12,12 @@ public enum ErrorCode {
 
     ITEM_NOT_EXISTS(404, "Item not Exists"),
 
-    CANNOT_NEGOTIATE(409, "This item cannot be negotiated")
+    CANNOT_NEGOTIATE(409, "This item cannot be negotiated"),
+
+    INVALID_JWT(401, "Invalid jwt"),
+    EXPIRED_JWT(401, "Expired Jwt"),
+    WRONG_PASSWORD(401, "Wrong password"),
+    REFRESH_TOKEN_NOT_FOUND(404, "RefreshToken not found")
     ;
 
     private final int status;

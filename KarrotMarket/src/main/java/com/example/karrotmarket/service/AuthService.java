@@ -1,20 +1,20 @@
 package com.example.karrotmarket.service;
 
-import com.example.karrotmarket.controller.dto.TokenDto;
+import com.example.karrotmarket.controller.dto.res.TokenRefreshResponse;
+import com.example.karrotmarket.controller.dto.res.TokenResponse;
 import com.example.karrotmarket.controller.dto.req.LoginRequest;
 import com.example.karrotmarket.controller.dto.req.SignupRequest;
-import com.example.karrotmarket.controller.dto.req.TokenRequestDto;
 import com.example.karrotmarket.controller.dto.res.MemberResponseDto;
 import com.example.karrotmarket.domain.Member;
 import com.example.karrotmarket.domain.RefreshToken;
+import com.example.karrotmarket.global.exception.RefreshTokenNotFoundException;
 import com.example.karrotmarket.global.exception.UserAlreadyExistsException;
+import com.example.karrotmarket.global.exception.UserNotFoundException;
+import com.example.karrotmarket.global.exception.WrongPasswordException;
 import com.example.karrotmarket.global.security.jwt.JwtTokenProvider;
 import com.example.karrotmarket.repository.MemberRepository;
 import com.example.karrotmarket.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,48 +23,45 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional
 public class AuthService {
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtTokenProvider tokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
-
+    @Transactional
     public MemberResponseDto signup(SignupRequest req) {
         validateDuplicateMember(req.getMemberEmail());
 
         Member member = req.toMember(passwordEncoder);
         return MemberResponseDto.of(memberRepository.save(member));
     }
+    public TokenResponse login(LoginRequest req) {
+        Member member = memberRepository.findByMemberEmail(req.getEmail())
+                .orElseThrow(UserNotFoundException::new);
 
-    public TokenDto login(LoginRequest req) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(req.getEmail(), req.getPassword());
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        TokenDto tokenDto = tokenProvider.createToken(authentication);
+        if(!passwordEncoder.matches(req.getPassword(), member.getMemberPassword())) {
+            throw new WrongPasswordException();
+        }
+        String accessToken = jwtTokenProvider.generateAccessToken(member.getMemberId());
+        String refreshToken = jwtTokenProvider.generateRefreshToken(member.getMemberId());
 
-        RefreshToken refreshToken = RefreshToken.builder()
-                .key(authentication.getName())
-                .value(tokenDto.getRefreshToken())
+        return TokenResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .accessTokenExpiresIn(jwtTokenProvider.getExpiredTime())
                 .build();
-        refreshTokenRepository.save(refreshToken);
-        return tokenDto;
     }
+    public TokenRefreshResponse reissue(String refreshToken) {
+        RefreshToken userRefreshToken = refreshTokenRepository.findByKey(jwtTokenProvider.getUserPk(refreshToken))
+                .orElseThrow(RefreshTokenNotFoundException::new);
 
-    public TokenDto reissue(TokenRequestDto tokenRequestDto) {
-        if(!tokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
-            throw new RuntimeException("Refresh Token not valid");
-        }
-        Authentication authentication = tokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
-        RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("User logout"));
-        if(!refreshToken.getValue().equals(tokenRequestDto.getRefreshToken())) {
-            throw new RuntimeException("Wrong user info");
-        }
-        TokenDto tokenDto = tokenProvider.createToken(authentication);
+        String newRefreshToken = jwtTokenProvider.generateRefreshToken(userRefreshToken.getKey());
+        userRefreshToken.updateValue(newRefreshToken);
 
-        RefreshToken newRefresh = refreshToken.updateValue(tokenDto.getRefreshToken());
-        refreshTokenRepository.save(newRefresh);
-
-        return tokenDto;
+        String accessToken = jwtTokenProvider.generateAccessToken(userRefreshToken.getKey());
+        return TokenRefreshResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(newRefreshToken)
+                .build();
     }
     private void validateDuplicateMember(String memberEmail) {
         if(memberRepository.existsByMemberEmail(memberEmail)){
