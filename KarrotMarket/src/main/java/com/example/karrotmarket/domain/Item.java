@@ -38,6 +38,8 @@ public class Item {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    private String itemImgUrl;
+
     @OneToMany(mappedBy = "item")
     private List<Hits> hits = new ArrayList<>();
 
@@ -46,5 +48,9 @@ public class Item {
 
     public void addDealRequestCount(){
         this.dealRequestCount += 1;
+    }
+
+    public void changeItemStatus(ItemStatus itemStatus) {
+        this.itemStatus = itemStatus;
     }
 }

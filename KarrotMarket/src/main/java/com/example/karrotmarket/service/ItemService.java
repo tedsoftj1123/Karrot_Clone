@@ -17,6 +17,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,10 +35,15 @@ public class ItemService {
     @CacheEvict(value = "items", allEntries = true, cacheManager = "testCacheManager")
     public AddItemResponse addItem(ItemRequest req) {
         Member member = memberFacade.getCurrentUser();
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/item/download-img")
+                .queryParam("fileName", req.getItemName())
+                .toUriString();
         itemRepository.save(
                 Item.builder()
                         .itemName(req.getItemName())
                         .category(req.getItemCategory())
+                        .itemImgUrl(fileDownloadUri)
                         .itemDescription(req.getItemDescription())
                         .canNegotiate(req.isCanNego())
                         .itemStatus(ItemStatus.SALE)
@@ -70,8 +76,8 @@ public class ItemService {
     @Transactional
     @Cacheable(value = "ItemDetailResponse", key = "#itemId", cacheManager = "testCacheManager")
     public ItemDetailResponse itemDetail(Long itemId) {
-        Member member = memberFacade.getCurrentUser();
-        Item item = itemRepository.findById(itemId)
+        final Member member = memberFacade.getCurrentUser();
+        final Item item = itemRepository.findById(itemId)
                 .orElseThrow(ItemNotExistsException::new);
         if(!hitsRepository.existsByMemberIdAndItem(member.getId(), item)) {
             hitsRepository.save(
@@ -85,6 +91,7 @@ public class ItemService {
                 .itemName(item.getItemName())
                 .itemDescription(item.getItemDescription())
                 .itemCategory(item.getCategory())
+                .itemImgUrl(item.getItemImgUrl())
                 .memberName(item.getMember().getMemberName())
                 .memberLocation(item.getMember().getAddress().getCity() + " " + item.getMember().getAddress().getDong())
                 .price(item.getPrice())
