@@ -8,7 +8,6 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Builder @Getter
-@AllArgsConstructor
 public class ItemResponse {
     private String itemName;
     private String itemDescription;

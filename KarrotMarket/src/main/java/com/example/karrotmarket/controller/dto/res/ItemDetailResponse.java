@@ -9,15 +9,18 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+
+
+@Builder @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder @Getter
 public class ItemDetailResponse {
     private String memberName;
     private String memberLocation;
 
     private String itemName;
     private String itemDescription;
+    private String itemImgUrl;
     private int likeCount;
     private Category itemCategory;
     private int hits;

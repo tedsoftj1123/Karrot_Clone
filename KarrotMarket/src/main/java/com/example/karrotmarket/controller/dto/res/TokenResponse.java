@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 import java.time.ZonedDateTime;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class TokenResponse {
     private String accessToken;

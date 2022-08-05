@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
-@AllArgsConstructor
 public class AddItemResponse {
     private final String itemName;
     private final String memberName;

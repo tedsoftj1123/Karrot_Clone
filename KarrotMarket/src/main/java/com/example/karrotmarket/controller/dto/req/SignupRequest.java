@@ -12,7 +12,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
 public class SignupRequest {
     @NotBlank(message = "id는 공백이나 뛰어쓰기를 허용하지 않습니다.")
