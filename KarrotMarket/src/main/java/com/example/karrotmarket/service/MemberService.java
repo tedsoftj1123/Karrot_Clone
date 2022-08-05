@@ -3,8 +3,12 @@ package com.example.karrotmarket.service;
 import com.example.karrotmarket.controller.dto.res.DealRequestResponse;
 import com.example.karrotmarket.controller.dto.res.ItemResponse;
 import com.example.karrotmarket.controller.dto.res.MyPageResponse;
+import com.example.karrotmarket.domain.DealRequest;
+import com.example.karrotmarket.domain.Item;
+import com.example.karrotmarket.domain.ItemStatus;
 import com.example.karrotmarket.domain.Member;
 import com.example.karrotmarket.facade.MemberFacade;
+import com.example.karrotmarket.repository.DealRequestRepository;
 import com.example.karrotmarket.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +20,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberFacade memberFacade;
+
+    private final DealRequestRepository dealRequestRepository;
 
     public MyPageResponse my() {
         Member member = memberFacade.getCurrentUser();
@@ -46,5 +52,16 @@ public class MemberService {
                 .memberItems(memberItems)
                 .memberDealRequests(memberDealRequests)
                 .build();
+    }
+
+    public void handleDealRequest(boolean accept, Long dealRequestId) {
+        DealRequest dealRequest = dealRequestRepository.findById(dealRequestId)
+                .orElseThrow(RuntimeException::new);
+        Item item = dealRequest.getItem();
+        if(accept) {
+            item.changeItemStatus(ItemStatus.RESERVE);
+            return;
+        }
+        dealRequestRepository.deleteById(dealRequestId);
     }
 }

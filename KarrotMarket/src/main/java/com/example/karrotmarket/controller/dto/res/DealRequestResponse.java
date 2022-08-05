@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.DayOfWeek;
 
-@AllArgsConstructor
+
 @Builder @Getter
 public class DealRequestResponse {
     private final int price;

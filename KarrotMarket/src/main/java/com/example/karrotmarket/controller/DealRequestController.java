@@ -15,4 +15,6 @@ public class DealRequestController {
     public void sendDealRequest(@PathVariable Long todoId, @RequestBody UserDealRequest req) {
         dealRequestService.sendDealRequest(todoId, req);
     }
+
+
 }
