@@ -1,4 +1,4 @@
-package com.example.karrotmarket.domain;
+package com.example.karrotmarket.domain.user.domain;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

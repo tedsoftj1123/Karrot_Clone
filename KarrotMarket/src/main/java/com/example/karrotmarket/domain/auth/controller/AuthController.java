@@ -1,4 +1,4 @@
-package com.example.karrotmarket.controller;
+package com.example.karrotmarket.domain.auth.controller;
 
 import com.example.karrotmarket.controller.dto.res.TokenRefreshResponse;
 import com.example.karrotmarket.controller.dto.res.TokenResponse;

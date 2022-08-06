@@ -1,10 +1,10 @@
-package com.example.karrotmarket.controller;
+package com.example.karrotmarket.domain.user.controller;
 
-import com.example.karrotmarket.controller.dto.req.HandleDealRequest;
-import com.example.karrotmarket.controller.dto.res.DealRequestResponse;
-import com.example.karrotmarket.controller.dto.res.ItemResponse;
-import com.example.karrotmarket.controller.dto.res.MyPageResponse;
-import com.example.karrotmarket.service.MemberService;
+import com.example.karrotmarket.domain.user.controller.dto.request.HandleDealRequest;
+import com.example.karrotmarket.domain.user.controller.dto.response.DealRequestResponse;
+import com.example.karrotmarket.domain.user.controller.dto.response.ItemResponse;
+import com.example.karrotmarket.domain.user.controller.dto.response.MyPageResponse;
+import com.example.karrotmarket.domain.user.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

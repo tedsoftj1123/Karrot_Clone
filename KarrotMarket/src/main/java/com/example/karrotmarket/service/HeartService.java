@@ -2,12 +2,11 @@ package com.example.karrotmarket.service;
 
 import com.example.karrotmarket.domain.Heart;
 import com.example.karrotmarket.domain.Item;
-import com.example.karrotmarket.domain.Member;
+import com.example.karrotmarket.domain.user.domain.Member;
 import com.example.karrotmarket.facade.MemberFacade;
 import com.example.karrotmarket.global.exception.ItemNotExistsException;
 import com.example.karrotmarket.repository.HeartRepository;
 import com.example.karrotmarket.repository.ItemRepository;
-import com.example.karrotmarket.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

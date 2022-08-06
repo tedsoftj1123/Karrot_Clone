@@ -7,7 +7,7 @@ import com.example.karrotmarket.controller.dto.res.ShowAllItemsResponse;
 import com.example.karrotmarket.domain.Hits;
 import com.example.karrotmarket.domain.Item;
 import com.example.karrotmarket.domain.ItemStatus;
-import com.example.karrotmarket.domain.Member;
+import com.example.karrotmarket.domain.user.domain.Member;
 import com.example.karrotmarket.facade.MemberFacade;
 import com.example.karrotmarket.global.exception.ItemNotExistsException;
 import com.example.karrotmarket.repository.HitsRepository;

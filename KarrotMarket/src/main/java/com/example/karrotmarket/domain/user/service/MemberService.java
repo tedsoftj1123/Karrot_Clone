@@ -1,18 +1,16 @@
-package com.example.karrotmarket.service;
+package com.example.karrotmarket.domain.user.service;
 
-import com.example.karrotmarket.controller.dto.req.HandleDealRequest;
-import com.example.karrotmarket.controller.dto.req.UserDealRequest;
-import com.example.karrotmarket.controller.dto.res.DealRequestResponse;
-import com.example.karrotmarket.controller.dto.res.ItemResponse;
-import com.example.karrotmarket.controller.dto.res.MyPageResponse;
+import com.example.karrotmarket.domain.user.controller.dto.request.HandleDealRequest;
+import com.example.karrotmarket.domain.user.controller.dto.response.DealRequestResponse;
+import com.example.karrotmarket.domain.user.controller.dto.response.ItemResponse;
+import com.example.karrotmarket.domain.user.controller.dto.response.MyPageResponse;
 import com.example.karrotmarket.domain.DealRequest;
 import com.example.karrotmarket.domain.Item;
 import com.example.karrotmarket.domain.ItemStatus;
-import com.example.karrotmarket.domain.Member;
+import com.example.karrotmarket.domain.user.domain.Member;
 import com.example.karrotmarket.facade.MemberFacade;
-import com.example.karrotmarket.global.exception.DealRequestNotFound;
+import com.example.karrotmarket.domain.user.exception.DealRequestNotFound;
 import com.example.karrotmarket.repository.DealRequestRepository;
-import com.example.karrotmarket.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

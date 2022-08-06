@@ -1,5 +1,6 @@
-package com.example.karrotmarket.domain;
+package com.example.karrotmarket.domain.user.domain;
 
+import com.example.karrotmarket.domain.*;
 import lombok.*;
 
 import javax.persistence.*;

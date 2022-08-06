@@ -1,4 +1,4 @@
-package com.example.karrotmarket.global.exception;
+package com.example.karrotmarket.domain.user.exception;
 
 import com.example.karrotmarket.global.error.exception.BaseException;
 import com.example.karrotmarket.global.error.exception.ErrorCode;

@@ -1,6 +1,6 @@
-package com.example.karrotmarket.repository;
+package com.example.karrotmarket.domain.user.domain.repository;
 
-import com.example.karrotmarket.domain.Member;
+import com.example.karrotmarket.domain.user.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
