@@ -1,6 +1,6 @@
 package com.example.karrotmarket.global.security.auth;
 
-import com.example.karrotmarket.domain.user.domain.Member;
+import com.example.karrotmarket.domain.entity.Member;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

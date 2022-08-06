@@ -1,6 +1,6 @@
 package com.example.karrotmarket.global.security.auth;
 
-import com.example.karrotmarket.domain.user.domain.repository.MemberRepository;
+import com.example.karrotmarket.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
