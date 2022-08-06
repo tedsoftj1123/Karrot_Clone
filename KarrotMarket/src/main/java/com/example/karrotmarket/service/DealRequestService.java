@@ -3,9 +3,11 @@ package com.example.karrotmarket.service;
 import com.example.karrotmarket.controller.dto.req.UserDealRequest;
 import com.example.karrotmarket.domain.DealRequest;
 import com.example.karrotmarket.domain.Item;
+import com.example.karrotmarket.domain.ItemStatus;
 import com.example.karrotmarket.domain.Member;
 import com.example.karrotmarket.facade.MemberFacade;
 import com.example.karrotmarket.global.exception.CannotNegoException;
+import com.example.karrotmarket.global.exception.DealRequestNotFound;
 import com.example.karrotmarket.global.exception.ItemNotExistsException;
 import com.example.karrotmarket.repository.DealRequestRepository;
 import com.example.karrotmarket.repository.ItemRepository;
@@ -25,7 +27,6 @@ public class DealRequestService {
         if(req.negoCheck(item.isCanNegotiate())){
             throw new CannotNegoException();
         }
-        item.addDealRequestCount();
         dealRequestRepository.save(
                 DealRequest.builder()
                         .item(item)
@@ -37,4 +38,6 @@ public class DealRequestService {
                         .build()
         );
     }
+
+
 }

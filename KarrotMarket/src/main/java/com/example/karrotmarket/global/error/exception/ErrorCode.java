@@ -19,7 +19,8 @@ public enum ErrorCode {
     WRONG_PASSWORD(401, "Wrong password"),
     REFRESH_TOKEN_NOT_FOUND(404, "RefreshToken not found"),
 
-    FILE_NOT_FOUND(404, "File not found")
+    FILE_NOT_FOUND(404, "File not found"),
+    DEAL_REQUEST_NOT_FOUND(404, "DealRequest not found")
     ;
 
     private final int status;

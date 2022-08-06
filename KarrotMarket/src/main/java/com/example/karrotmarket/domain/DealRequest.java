@@ -18,6 +18,8 @@ public class DealRequest {
 
     private String location;
 
+    private boolean isAccepted;
+
     @Enumerated(EnumType.STRING)
     private DayOfWeek day;
 
@@ -30,5 +32,9 @@ public class DealRequest {
     private Member member;
 
     private String dealMember;
+
+    public void toAccepted() {
+        this.isAccepted = true;
+    }
 
 }
