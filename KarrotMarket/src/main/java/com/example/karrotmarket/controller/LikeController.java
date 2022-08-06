@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class LikeController {
     private final HeartService heartService;
 
-    @GetMapping("/like/{todoId}")
+    @GetMapping("/main/like/{todoId}")
     public void doLike(@PathVariable Long todoId) {
         heartService.doLike(todoId);
     }
