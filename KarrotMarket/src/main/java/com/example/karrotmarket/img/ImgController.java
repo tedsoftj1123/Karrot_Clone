@@ -19,7 +19,7 @@ public class ImgController {
     private final ImgService imgService;
     @PostMapping("/upload-img")
     public void upload(@RequestParam("image") MultipartFile file, @RequestParam String itemName) {
-        imgService.storeImg(file, itemName+".png");
+        imgService.storeImg(file, itemName+file.getName());
     }
 
     @GetMapping("/download-img")
