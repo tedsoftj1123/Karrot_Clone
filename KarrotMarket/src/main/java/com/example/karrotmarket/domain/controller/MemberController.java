@@ -6,8 +6,6 @@ import com.example.karrotmarket.domain.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 public class MemberController {

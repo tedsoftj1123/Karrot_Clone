@@ -28,8 +28,7 @@ public class DealRequestService {
         dealRequestRepository.save(
                 DealRequest.builder()
                         .item(item)
-                        .member(item.getMember())
-                        .dealMember(member.getMemberId())
+                        .dealMemberId(member.getMemberId())
                         .day(req.getDay())
                         .location(req.getLocation())
                         .price(item.isCanNegotiate() ? req.getPrice() : item.getPrice())

@@ -26,9 +26,6 @@ public class Item {
 
     private boolean canNegotiate;
 
-    @OneToMany(mappedBy = "item")
-    private List<DealRequest> dealRequests = new ArrayList<>();
-
     @Enumerated(EnumType.STRING)
     private ItemStatus itemStatus;
 

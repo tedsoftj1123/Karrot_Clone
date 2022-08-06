@@ -12,6 +12,7 @@ import com.example.karrotmarket.domain.repository.DealRequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,15 +24,13 @@ public class MemberService {
 
     public MyPageResponse my() {
         Member member = memberFacade.getCurrentUser();
-        List<MyPageResponse.DealRequestResponse> acceptedDealRequests = member.getDealRequests()
-                .stream().filter(DealRequest::isAccepted)
-                .map(d -> MyPageResponse.DealRequestResponse.builder()
-                        .dealMember(d.getDealMember())
-                        .price(d.getPrice())
-                        .day(d.getDay())
-                        .location(d.getLocation())
-                        .build())
+        List<MyPageResponse.DealRequestResponse> inComingDealRequests = member.getDealRequests().stream()
+                .map(this::toDealRequestResponse)
                 .collect(Collectors.toList());
+        List<MyPageResponse.DealRequestResponse> outComingDealRequests = dealRequestRepository.findAllByDealMemberId(member.getMemberId())
+                .stream().map(
+                        this::toDealRequestResponse
+                ).collect(Collectors.toList());
         List<MyPageResponse.ItemResponse> memberItems = member.getItems().stream().map(
                 item -> MyPageResponse.ItemResponse.builder()
                         .itemName(item.getItemName())
@@ -42,13 +41,16 @@ public class MemberService {
                         .itemStatus(item.getItemStatus())
                         .build()
         ).collect(Collectors.toList());
+        List<List<MyPageResponse.DealRequestResponse>> joined = new ArrayList<>();
+        joined.add(inComingDealRequests);
+        joined.add(outComingDealRequests);
         return MyPageResponse.builder()
                 .memberId(member.getMemberId())
                 .memberName(member.getMemberName())
                 .memberEmail(member.getMemberEmail())
                 .memberAddress(member.getAddress())
                 .memberItems(memberItems)
-                .acceptedDealRequests(acceptedDealRequests)
+                .inComingAndOutComingDealRequests(joined)
                 .build();
     }
 
@@ -61,5 +63,15 @@ public class MemberService {
             dealRequest.toAccepted();
         }
         dealRequestRepository.deleteById(req.getDealRequestId());
+    }
+
+    private MyPageResponse.DealRequestResponse toDealRequestResponse(DealRequest d) {
+        return MyPageResponse.DealRequestResponse.builder()
+                .itemId(d.getItem().getId())
+                .dealMember(d.getDealMemberId())
+                .price(d.getPrice())
+                .day(d.getDay())
+                .location(d.getLocation())
+                .build();
     }
 }

@@ -19,11 +19,12 @@ public class MyPageResponse {
 
     private final Address memberAddress;
 
-    private final List<DealRequestResponse> acceptedDealRequests;
+    private final List<List<DealRequestResponse>> inComingAndOutComingDealRequests;
     private final List<ItemResponse> memberItems;
 
     @Builder @Getter
     public static class DealRequestResponse {
+        private final Long itemId;
         private final int price;
         private final String location;
         private final DayOfWeek day;

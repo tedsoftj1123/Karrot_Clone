@@ -31,7 +31,8 @@ public class DealRequest {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    private String dealMember;
+
+    private String dealMemberId;
 
     public void toAccepted() {
         this.isAccepted = true;
