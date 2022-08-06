@@ -26,7 +26,8 @@ public class Item {
 
     private boolean canNegotiate;
 
-    private int dealRequestCount;
+    @OneToMany(mappedBy = "item")
+    private List<DealRequest> dealRequests = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private ItemStatus itemStatus;
@@ -45,10 +46,6 @@ public class Item {
 
     @OneToMany(mappedBy = "item")
     private List<Heart> likeCount = new ArrayList<>();
-
-    public void addDealRequestCount(){
-        this.dealRequestCount += 1;
-    }
 
     public void changeItemStatus(ItemStatus itemStatus) {
         this.itemStatus = itemStatus;
