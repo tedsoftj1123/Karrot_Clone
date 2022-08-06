@@ -13,6 +13,7 @@ public class ShowAllItemsResponse {
     private Long itemId;
     private String itemName;
     private String location;
+    private boolean liked;
     private int price;
     private int likeCount;
     private int itemDealRequestCount;

@@ -9,6 +9,7 @@ import com.example.karrotmarket.domain.entity.Item;
 import com.example.karrotmarket.domain.entity.ItemStatus;
 import com.example.karrotmarket.domain.entity.Member;
 import com.example.karrotmarket.domain.facade.MemberFacade;
+import com.example.karrotmarket.domain.repository.HeartRepository;
 import com.example.karrotmarket.global.exception.ItemNotExistsException;
 import com.example.karrotmarket.domain.repository.HitsRepository;
 import com.example.karrotmarket.domain.repository.ItemRepository;
@@ -30,6 +31,7 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final MemberFacade memberFacade;
     private final HitsRepository hitsRepository;
+    private final HeartRepository heartRepository;
 
     @Transactional
     @CacheEvict(value = "items", allEntries = true, cacheManager = "testCacheManager")
@@ -60,11 +62,13 @@ public class ItemService {
 
     @Cacheable(value = "items", cacheManager = "testCacheManager")
     public List<ShowAllItemsResponse> main() {
+        Member currentMember = memberFacade.getCurrentUser();
         return itemRepository.findAll().stream()
                 .filter(i -> i.getItemStatus().equals(ItemStatus.SALE))
                 .map(item -> ShowAllItemsResponse.builder()
                         .itemId(item.getId())
                         .itemName(item.getItemName())
+                        .liked(heartRepository.existsByMemberAndItem(currentMember, item))
                         .location(item.getMember().getAddress().getDong())
                         .price(item.getPrice())
                         .likeCount(item.getLikeCount().size())
@@ -90,6 +94,7 @@ public class ItemService {
                 .itemDescription(item.getItemDescription())
                 .itemCategory(item.getCategory())
                 .itemImgUrl(item.getItemImgUrl())
+                .liked(heartRepository.existsByMemberAndItem(member, item))
                 .memberName(item.getMember().getMemberName())
                 .memberLocation(item.getMember().getAddress().getCity() + " " + item.getMember().getAddress().getDong())
                 .price(item.getPrice())

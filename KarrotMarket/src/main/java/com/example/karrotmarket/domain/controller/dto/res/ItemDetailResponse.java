@@ -19,6 +19,7 @@ public class ItemDetailResponse {
     private String itemImgUrl;
     private int likeCount;
     private Category itemCategory;
+    private boolean liked;
     private int hits;
     private int price;
 
