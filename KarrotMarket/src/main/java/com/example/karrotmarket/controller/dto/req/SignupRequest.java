@@ -1,9 +1,8 @@
 package com.example.karrotmarket.controller.dto.req;
 
-import com.example.karrotmarket.domain.Address;
-import com.example.karrotmarket.domain.Member;
-import com.example.karrotmarket.domain.Role;
-import lombok.AllArgsConstructor;
+import com.example.karrotmarket.domain.user.domain.Address;
+import com.example.karrotmarket.domain.user.domain.Member;
+import com.example.karrotmarket.domain.user.domain.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

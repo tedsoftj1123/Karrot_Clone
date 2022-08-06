@@ -1,4 +1,4 @@
-package com.example.karrotmarket.controller.dto.req;
+package com.example.karrotmarket.domain.user.controller.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

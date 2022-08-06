@@ -1,13 +1,8 @@
-package com.example.karrotmarket.controller.dto.res;
+package com.example.karrotmarket.domain.user.controller.dto.response;
 
-import com.example.karrotmarket.controller.dto.req.UserDealRequest;
-import com.example.karrotmarket.domain.Address;
-import com.example.karrotmarket.domain.DealRequest;
-import com.example.karrotmarket.domain.Item;
-import lombok.AllArgsConstructor;
+import com.example.karrotmarket.domain.user.domain.Address;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 

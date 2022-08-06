@@ -1,4 +1,4 @@
-package com.example.karrotmarket.controller.dto.res;
+package com.example.karrotmarket.domain.user.controller.dto.response;
 
 import com.example.karrotmarket.domain.ItemStatus;
 import lombok.AllArgsConstructor;
