@@ -1,5 +1,6 @@
 package com.example.karrotmarket.controller.dto.res;
 
+import com.example.karrotmarket.controller.dto.req.UserDealRequest;
 import com.example.karrotmarket.domain.Address;
 import com.example.karrotmarket.domain.DealRequest;
 import com.example.karrotmarket.domain.Item;
@@ -20,7 +21,5 @@ public class MyPageResponse {
 
     private final Address memberAddress;
 
-    private final List<ItemResponse> memberItems;
-
-    private final List<DealRequestResponse> memberDealRequests;
+    private final List<DealRequestResponse> acceptedDealRequests;
 }
