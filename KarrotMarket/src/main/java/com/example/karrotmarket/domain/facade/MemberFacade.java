@@ -18,7 +18,7 @@ public class MemberFacade {
     public Member getCurrentUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (principal instanceof UserDetails) {
+        if (!(principal instanceof UserDetails)) {
             throw new TokenInvalidException();
         }
 

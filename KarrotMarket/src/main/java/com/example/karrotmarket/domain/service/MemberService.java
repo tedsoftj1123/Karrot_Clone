@@ -1,8 +1,6 @@
 package com.example.karrotmarket.domain.service;
 
 import com.example.karrotmarket.domain.controller.dto.req.HandleDealRequest;
-import com.example.karrotmarket.domain.controller.dto.res.DealRequestResponse;
-import com.example.karrotmarket.domain.controller.dto.res.ItemResponse;
 import com.example.karrotmarket.domain.controller.dto.res.MyPageResponse;
 import com.example.karrotmarket.domain.entity.DealRequest;
 import com.example.karrotmarket.domain.entity.Item;
@@ -25,28 +23,17 @@ public class MemberService {
 
     public MyPageResponse my() {
         Member member = memberFacade.getCurrentUser();
-        List<DealRequestResponse> acceptedDealRequests = member.getDealRequests()
+        List<MyPageResponse.DealRequestResponse> acceptedDealRequests = member.getDealRequests()
                 .stream().filter(DealRequest::isAccepted)
-                .map(d -> DealRequestResponse.builder()
+                .map(d -> MyPageResponse.DealRequestResponse.builder()
                         .dealMember(d.getDealMember())
                         .price(d.getPrice())
                         .day(d.getDay())
                         .location(d.getLocation())
                         .build())
                 .collect(Collectors.toList());
-        return MyPageResponse.builder()
-                .memberId(member.getMemberId())
-                .memberName(member.getMemberName())
-                .memberEmail(member.getMemberEmail())
-                .memberAddress(member.getAddress())
-                .acceptedDealRequests(acceptedDealRequests)
-                .build();
-    }
-
-    public List<ItemResponse> userItems() {
-        Member member = memberFacade.getCurrentUser();
-        return member.getItems().stream().map(
-                item -> ItemResponse.builder()
+        List<MyPageResponse.ItemResponse> memberItems = member.getItems().stream().map(
+                item -> MyPageResponse.ItemResponse.builder()
                         .itemName(item.getItemName())
                         .itemDescription(item.getItemDescription())
                         .createdAt(item.getCreatedAt())
@@ -55,19 +42,16 @@ public class MemberService {
                         .itemStatus(item.getItemStatus())
                         .build()
         ).collect(Collectors.toList());
+        return MyPageResponse.builder()
+                .memberId(member.getMemberId())
+                .memberName(member.getMemberName())
+                .memberEmail(member.getMemberEmail())
+                .memberAddress(member.getAddress())
+                .memberItems(memberItems)
+                .acceptedDealRequests(acceptedDealRequests)
+                .build();
     }
 
-    public List<DealRequestResponse> userDealRequests() {
-        Member member = memberFacade.getCurrentUser();
-        return member.getDealRequests().stream()
-                .map(dealRequest -> DealRequestResponse.builder()
-                        .dealMember(dealRequest.getDealMember())
-                        .day(dealRequest.getDay())
-                        .location(dealRequest.getLocation())
-                        .price(dealRequest.getPrice())
-                        .build()
-                ).collect(Collectors.toList());
-    }
     public void handleDealRequest(HandleDealRequest req) {
         DealRequest dealRequest = dealRequestRepository.findById(req.getDealRequestId())
                 .orElseThrow(DealRequestNotFound::new);
