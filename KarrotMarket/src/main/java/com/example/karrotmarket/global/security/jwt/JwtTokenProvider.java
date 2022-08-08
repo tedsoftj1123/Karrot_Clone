@@ -6,14 +6,17 @@ import com.example.karrotmarket.global.exception.InvalidJwtException;
 import com.example.karrotmarket.global.security.auth.AuthDetailsService;
 import com.example.karrotmarket.domain.repository.RefreshTokenRepository;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import java.security.Key;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
@@ -23,6 +26,11 @@ public class JwtTokenProvider {
     private final AuthDetailsService authDetailsService;
     private final JwtProperties jwtProperties;
     private final RefreshTokenRepository refreshTokenRepository;
+    private Key key;
+    @PostConstruct
+    private void init() {
+        this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtProperties.getSecretKey()));
+    }
 
     public String generateAccessToken(String uid) {
         return generateToken(uid, "access", jwtProperties.getAccessExp());
@@ -40,7 +48,7 @@ public class JwtTokenProvider {
 
     private String generateToken(String uid, String type, Long exp) {
         return Jwts.builder()
-                .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
+                .signWith(key, SignatureAlgorithm.HS256)
                 .setSubject(uid)
                 .claim("type", type)
                 .setIssuedAt(new Date())
@@ -67,12 +75,12 @@ public class JwtTokenProvider {
     }
 
     public String getUserPk(String token) {
-        return Jwts.parser().setSigningKey(jwtProperties.getSecretKey()).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parserBuilder().setSigningKey(jwtProperties.getSecretKey()).build().parseClaimsJws(token).getBody().getSubject();
     }
 
     public boolean validateToken(String jwtToken) {
         try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(jwtProperties.getSecretKey()).parseClaimsJws(jwtToken);
+            Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(jwtProperties.getSecretKey()).build().parseClaimsJws(jwtToken);
             return !claims.getBody().getExpiration().before(new Date());
         } catch (io.jsonwebtoken.ExpiredJwtException e) {
             throw new com.example.karrotmarket.global.exception.ExpiredJwtException();
