@@ -11,6 +11,7 @@ import com.example.karrotmarket.domain.repository.DealRequestRepository;
 import com.example.karrotmarket.domain.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -18,6 +19,8 @@ public class DealRequestService {
     private final DealRequestRepository dealRequestRepository;
     private final ItemRepository itemRepository;
     private final MemberFacade memberFacade;
+
+    @Transactional
     public void sendDealRequest(Long todoId, UserDealRequest req) {
         Member member = memberFacade.getCurrentUser();
         Item item = itemRepository.findById(todoId)

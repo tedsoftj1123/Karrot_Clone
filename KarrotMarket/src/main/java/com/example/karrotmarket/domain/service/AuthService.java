@@ -27,13 +27,13 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
-    @Transactional
     public MemberResponseDto signup(SignupRequest req) {
         validateDuplicateMember(req.getMemberEmail());
 
         Member member = req.toMember(passwordEncoder);
         return MemberResponseDto.of(memberRepository.save(member));
     }
+
     public TokenResponse login(LoginRequest req) {
         Member member = memberRepository.findByMemberEmail(req.getEmail())
                 .orElseThrow(UserNotFoundException::new);

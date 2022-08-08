@@ -7,6 +7,7 @@ import com.example.karrotmarket.global.security.auth.AuthDetailsService;
 import com.example.karrotmarket.domain.repository.RefreshTokenRepository;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -55,7 +56,6 @@ public class JwtTokenProvider {
         }
         return null;
     }
-
     public ZonedDateTime getExpiredTime() {
         return ZonedDateTime.now().plusSeconds(jwtProperties.getAccessExp());
     }

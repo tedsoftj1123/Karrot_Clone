@@ -9,9 +9,11 @@ import com.example.karrotmarket.domain.repository.HeartRepository;
 import com.example.karrotmarket.domain.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class HeartService {
     private final HeartRepository heartRepository;
     private final ItemRepository itemRepository;

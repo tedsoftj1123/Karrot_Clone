@@ -11,6 +11,7 @@ import com.example.karrotmarket.global.exception.DealRequestNotFound;
 import com.example.karrotmarket.domain.repository.DealRequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 public class MemberService {
     private final MemberFacade memberFacade;
     private final DealRequestRepository dealRequestRepository;
-
+    @Transactional(readOnly = true)
     public MyPageResponse my() {
         Member member = memberFacade.getCurrentUser();
         List<MyPageResponse.DealRequestResponse> inComingDealRequests = member.getDealRequests().stream()
