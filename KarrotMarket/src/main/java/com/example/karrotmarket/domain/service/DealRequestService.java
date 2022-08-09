@@ -25,16 +25,18 @@ public class DealRequestService {
         Member member = memberFacade.getCurrentUser();
         Item item = itemRepository.findById(todoId)
                 .orElseThrow(ItemNotExistsException::new);
-        if(req.negoCheck(item.isCanNegotiate())){
+        if(!item.isCanNegotiate() && req.getPrice()!=item.getPrice()){
             throw new CannotNegoException();
         }
+        System.out.println(req.getLocationDetail().getDong());
         dealRequestRepository.save(
                 DealRequest.builder()
                         .item(item)
+                        .member(member)
                         .dealMemberId(member.getMemberId())
-                        .day(req.getDay())
-                        .location(req.getLocation())
-                        .price(item.isCanNegotiate() ? req.getPrice() : item.getPrice())
+                        .timeDetail(req.getTimeDetail())
+                        .locationDetail(req.getLocationDetail())
+                        .price(req.getPrice())
                         .build()
         );
     }

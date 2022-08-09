@@ -1,6 +1,8 @@
 package com.example.karrotmarket.domain.controller.dto.res;
 
 import com.example.karrotmarket.domain.entity.Address;
+import com.example.karrotmarket.domain.entity.DealRequestLocationDetail;
+import com.example.karrotmarket.domain.entity.DealRequestTimeDetail;
 import com.example.karrotmarket.domain.entity.ItemStatus;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,8 +28,8 @@ public class MyPageResponse {
     public static class DealRequestResponse {
         private final Long itemId;
         private final int price;
-        private final String location;
-        private final DayOfWeek day;
+        private final DealRequestTimeDetail timeDetail;
+        private final DealRequestLocationDetail locationDetail;
         private final String dealMember;
     }
 

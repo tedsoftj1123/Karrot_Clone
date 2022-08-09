@@ -1,5 +1,8 @@
 package com.example.karrotmarket.domain.controller.dto.req;
 
+import com.example.karrotmarket.domain.entity.DealRequestLocationDetail;
+import com.example.karrotmarket.domain.entity.DealRequestTimeDetail;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,11 +11,7 @@ import java.time.DayOfWeek;
 @Getter
 @NoArgsConstructor
 public class UserDealRequest {
-    private DayOfWeek day;
-    private String location;
-    private Integer price;
-
-    public boolean negoCheck(boolean canNego) {
-        return !canNego && !price.equals(0);
-    }
+    private DealRequestTimeDetail timeDetail;
+    private DealRequestLocationDetail locationDetail;
+    private int price;
 }
