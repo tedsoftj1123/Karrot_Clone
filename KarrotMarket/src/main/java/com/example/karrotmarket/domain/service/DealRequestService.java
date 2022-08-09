@@ -29,7 +29,7 @@ public class DealRequestService {
         if (dealRequestRepository.existsByMemberAndItem(member, item)) {
             throw new DealRequestAlreadyExistsException();
         }
-        if(!item.isCanNegotiate() && req.getPrice()!=item.getPrice()){
+        if(!item.isNegotiable() && req.getPrice()!=item.getPrice()){
             throw new CannotNegoException();
         }
         System.out.println(req.getLocationDetail().getDong());

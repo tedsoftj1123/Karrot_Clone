@@ -37,7 +37,7 @@ public class MemberService {
                         .itemName(item.getItemName())
                         .itemDescription(item.getItemDescription())
                         .createdAt(item.getCreatedAt())
-                        .canNego(item.isCanNegotiate())
+                        .canNego(item.isNegotiable())
                         .price(item.getPrice())
                         .itemStatus(item.getItemStatus())
                         .build()

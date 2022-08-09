@@ -20,6 +20,7 @@ public class ItemDetailResponse {
     private int likeCount;
     private Category itemCategory;
     private boolean liked;
+    private boolean negotiable;
     private int hits;
     private int price;
 

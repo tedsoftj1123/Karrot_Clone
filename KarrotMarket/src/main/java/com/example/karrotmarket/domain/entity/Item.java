@@ -24,7 +24,7 @@ public class Item {
 
     private int price;
 
-    private boolean canNegotiate;
+    private boolean negotiable;
 
     @Enumerated(EnumType.STRING)
     private ItemStatus itemStatus;

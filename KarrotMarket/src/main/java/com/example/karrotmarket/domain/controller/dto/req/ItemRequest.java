@@ -10,6 +10,6 @@ public class ItemRequest {
     private String itemName;
     private String itemDescription;
     private int itemPrice;
-    private boolean canNego;
+    private boolean negotiable;
     private Category itemCategory;
 }
