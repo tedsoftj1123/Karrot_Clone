@@ -1,6 +1,7 @@
 package com.example.karrotmarket.global.error;
 
 import lombok.*;
+import org.springframework.http.HttpStatus;
 
 import java.time.ZonedDateTime;
 
