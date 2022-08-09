@@ -20,8 +20,11 @@ public class DealRequest {
 
     private boolean isAccepted;
 
-    @Enumerated(EnumType.STRING)
-    private DayOfWeek day;
+    @Embedded
+    private DealRequestTimeDetail timeDetail;
+
+    @Embedded
+    private DealRequestLocationDetail locationDetail;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
