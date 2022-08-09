@@ -71,8 +71,8 @@ public class MemberService {
                 .itemId(d.getItem().getId())
                 .dealMember(d.getDealMemberId())
                 .price(d.getPrice())
-                .day(d.getDay())
-                .location(d.getLocation())
+                .locationDetail(d.getLocationDetail())
+                .timeDetail(d.getTimeDetail())
                 .build();
     }
 }
