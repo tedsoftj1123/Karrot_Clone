@@ -20,7 +20,8 @@ public enum ErrorCode {
     REFRESH_TOKEN_NOT_FOUND(404, "RefreshToken not found"),
 
     FILE_NOT_FOUND(404, "File not found"),
-    DEAL_REQUEST_NOT_FOUND(404, "DealRequest not found")
+    DEAL_REQUEST_NOT_FOUND(404, "DealRequest not found"),
+    DEAL_REQUEST_ALREADY_EXISTS(409, "Deal Request cannot be duplicated")
     ;
 
     private final int status;
