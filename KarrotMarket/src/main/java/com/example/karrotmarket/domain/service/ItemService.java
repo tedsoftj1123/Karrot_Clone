@@ -63,7 +63,7 @@ public class ItemService {
     @Cacheable(value = "items", cacheManager = "testCacheManager")
     public List<ShowAllItemsResponse> main() {
         Member currentMember = memberFacade.getCurrentUser();
-        return itemRepository.findAll().stream()
+        return itemRepository.findAllByOrderByIdDesc().stream()
                 .filter(i -> i.getItemStatus().equals(ItemStatus.SALE))
                 .map(item -> ShowAllItemsResponse.builder()
                         .itemId(item.getId())
