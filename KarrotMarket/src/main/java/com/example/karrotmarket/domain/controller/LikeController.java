@@ -1,5 +1,6 @@
 package com.example.karrotmarket.domain.controller;
 
+import com.example.karrotmarket.domain.controller.dto.res.MessageResponse;
 import com.example.karrotmarket.domain.service.HeartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +13,7 @@ public class LikeController {
     private final HeartService heartService;
 
     @GetMapping("/item/like/{todoId}")
-    public void doLike(@PathVariable Long todoId) {
-        heartService.doLike(todoId);
+    public MessageResponse doLike(@PathVariable Long todoId) {
+        return heartService.doLike(todoId);
     }
 }

@@ -1,6 +1,7 @@
 package com.example.karrotmarket.domain.service;
 
 import com.example.karrotmarket.domain.controller.dto.req.UserDealRequest;
+import com.example.karrotmarket.domain.controller.dto.res.MessageResponse;
 import com.example.karrotmarket.domain.entity.DealRequest;
 import com.example.karrotmarket.domain.entity.Item;
 import com.example.karrotmarket.domain.entity.Member;
@@ -22,7 +23,7 @@ public class DealRequestService {
     private final MemberFacade memberFacade;
 
     @Transactional
-    public void sendDealRequest(Long todoId, UserDealRequest req) {
+    public MessageResponse sendDealRequest(Long todoId, UserDealRequest req) {
         Member member = memberFacade.getCurrentUser();
         Item item = itemRepository.findById(todoId)
                 .orElseThrow(ItemNotExistsException::new);
@@ -43,6 +44,9 @@ public class DealRequestService {
                         .price(req.getPrice())
                         .build()
         );
+        String resMsg = item.getMember().getMemberId() + "님의 상품 "
+                + item.getItemName() + "에 거래 요청을 전송했습니다.";
+        return new MessageResponse(resMsg);
     }
 
 

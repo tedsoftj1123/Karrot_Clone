@@ -1,5 +1,6 @@
 package com.example.karrotmarket.domain.service;
 
+import com.example.karrotmarket.domain.controller.dto.res.MessageResponse;
 import com.example.karrotmarket.domain.entity.Heart;
 import com.example.karrotmarket.domain.entity.Item;
 import com.example.karrotmarket.domain.entity.Member;
@@ -19,26 +20,28 @@ public class HeartService {
     private final ItemRepository itemRepository;
     private final MemberFacade memberFacade;
 
-    public void doLike(Long itemId) {
+    public MessageResponse doLike(Long itemId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(ItemNotExistsException::new);
         Member member = memberFacade.getCurrentUser();
         if(heartRepository.existsByMemberAndItem(member, item)){
-            unlike(member, item);
+            return unlike(member, item);
         } else {
-            like(member, item);
+            return like(member, item);
         }
     }
 
-    private void like(Member member, Item item) {
+    private MessageResponse like(Member member, Item item) {
         heartRepository.save(
                 Heart.builder()
                         .member(member)
                         .item(item)
                         .build()
         );
+        return new MessageResponse("상품에 좋아요를 눌렀습니다.");
     }
-    private void unlike(Member member, Item item) {
+    private MessageResponse unlike(Member member, Item item) {
         heartRepository.deleteByMemberAndItem(member, item);
+        return new MessageResponse("상품의 좋아요를 취소했습니다.");
     }
 }
