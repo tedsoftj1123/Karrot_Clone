@@ -1,6 +1,7 @@
 package com.example.karrotmarket.domain.service;
 
 
+import com.example.karrotmarket.domain.controller.dto.req.ModifyItemRequest;
 import com.example.karrotmarket.domain.controller.dto.res.MessageResponse;
 import com.example.karrotmarket.domain.controller.dto.res.MyPageResponse;
 import com.example.karrotmarket.domain.entity.DealRequest;
@@ -12,6 +13,7 @@ import com.example.karrotmarket.domain.repository.ItemRepository;
 import com.example.karrotmarket.global.exception.DealRequestNotFound;
 import com.example.karrotmarket.domain.repository.DealRequestRepository;
 import com.example.karrotmarket.global.exception.ItemNotExistsException;
+import com.example.karrotmarket.global.exception.NoAuthorityException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
@@ -65,6 +67,7 @@ public class MemberService {
         DealRequest dealRequest = dealRequestRepository.findById(dealRequestId)
                 .orElseThrow(DealRequestNotFound::new);
         Item item = itemRepository.findById(dealRequest.getItem().getId()).orElseThrow(ItemNotExistsException::new);
+        dealRequest.toAccepted();
         item.changeItemStatus(ItemStatus.RESERVE);
         dealRequestRepository.delete(dealRequest);
         return new MessageResponse("거래 요청이 수락되었습니다.");
@@ -91,5 +94,22 @@ public class MemberService {
                 .locationDetail(d.getLocationDetail())
                 .timeDetail(d.getTimeDetail())
                 .build();
+    }
+
+    public MessageResponse modifyItem(Long itemId, ModifyItemRequest req) {
+        Member currentMember = memberFacade.getCurrentUser();
+        Item item = itemRepository.findById(itemId)
+                        .orElseThrow(ItemNotExistsException :: new);
+        validateUser(item, currentMember);
+
+        item.modifyItemInfo(req);
+        itemRepository.save(item);
+        return new MessageResponse("상품 정보 변경 완료");
+    }
+
+    private void validateUser(Item item, Member member) {
+        if(item.getMember() != member) {
+            throw new NoAuthorityException();
+        }
     }
 }

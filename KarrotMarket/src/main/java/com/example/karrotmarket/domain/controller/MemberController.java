@@ -1,5 +1,6 @@
 package com.example.karrotmarket.domain.controller;
 
+import com.example.karrotmarket.domain.controller.dto.req.ModifyItemRequest;
 import com.example.karrotmarket.domain.controller.dto.res.MessageResponse;
 import com.example.karrotmarket.domain.controller.dto.res.MyPageResponse;
 import com.example.karrotmarket.domain.service.MemberService;
@@ -34,5 +35,10 @@ public class MemberController {
     @PatchMapping("/my/items/{itemId}")
     public MessageResponse turnUpItem(@PathVariable Long itemId) {
         return memberService.turnUpItem(itemId);
+    }
+
+    @PutMapping("/my/items/modify/{itemId}")
+    public MessageResponse modifyItem(@PathVariable Long itemId, @RequestBody ModifyItemRequest req) {
+        return memberService.modifyItem(itemId, req);
     }
 }

@@ -21,7 +21,8 @@ public enum ErrorCode {
 
     FILE_NOT_FOUND(404, "File not found"),
     DEAL_REQUEST_NOT_FOUND(404, "DealRequest not found"),
-    DEAL_REQUEST_ALREADY_EXISTS(409, "Deal Request cannot be duplicated")
+    DEAL_REQUEST_ALREADY_EXISTS(409, "Deal Request cannot be duplicated"),
+    NO_AUTHORITY(403, "Cannot access")
     ;
 
     private final int status;

@@ -1,5 +1,6 @@
 package com.example.karrotmarket.domain.entity;
 
+import com.example.karrotmarket.domain.controller.dto.req.ModifyItemRequest;
 import lombok.*;
 
 import javax.persistence.*;
@@ -60,5 +61,12 @@ public class Item {
 
     public void changeItemCreatedAt() {
         this.createdAt = LocalDateTime.now();
+    }
+
+    public void modifyItemInfo(ModifyItemRequest changeInfo) {
+        this.itemName = changeInfo.getItemName();
+        this.itemDescription = changeInfo.getItemDescription();
+        this.category = changeInfo.getItemCategory();
+        this.negotiable = changeInfo.isItemNegotiable();
     }
 }
