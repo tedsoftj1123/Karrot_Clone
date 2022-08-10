@@ -38,13 +38,16 @@ public class Item {
 
     private String itemImgUrl;
 
-    @OneToMany(mappedBy = "item")
-    private List<Hits> hits = new ArrayList<>();
+    private int views;
 
     @OneToMany(mappedBy = "item")
     private List<Heart> likeCount = new ArrayList<>();
 
     public void changeItemStatus(ItemStatus itemStatus) {
         this.itemStatus = itemStatus;
+    }
+
+    public void addViewCount() {
+        this.views += 1;
     }
 }
