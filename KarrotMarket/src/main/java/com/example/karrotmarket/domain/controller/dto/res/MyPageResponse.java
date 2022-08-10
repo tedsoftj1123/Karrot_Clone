@@ -35,6 +35,7 @@ public class MyPageResponse {
 
     @Builder @Getter
     public static class ItemResponse {
+        private Long itemId;
         private String itemName;
         private String itemDescription;
         private LocalDateTime createdAt;

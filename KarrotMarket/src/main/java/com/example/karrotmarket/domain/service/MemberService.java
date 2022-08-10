@@ -13,6 +13,7 @@ import com.example.karrotmarket.global.exception.DealRequestNotFound;
 import com.example.karrotmarket.domain.repository.DealRequestRepository;
 import com.example.karrotmarket.global.exception.ItemNotExistsException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +35,7 @@ public class MemberService {
                 ).collect(Collectors.toList());
         List<MyPageResponse.ItemResponse> memberItems = currentUser.getItems().stream().map(
                 item -> MyPageResponse.ItemResponse.builder()
+                        .itemId(item.getId())
                         .itemName(item.getItemName())
                         .itemDescription(item.getItemDescription())
                         .createdAt(item.getCreatedAt())
@@ -71,6 +73,16 @@ public class MemberService {
         dealRequestRepository.deleteById(dealRequestId);
         return new MessageResponse("거래 요청이 거절되었습니다.");
     }
+
+    @CacheEvict(value = "items", allEntries = true, cacheManager = "testCacheManager")
+    public MessageResponse turnUpItem(Long itemId) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(ItemNotExistsException::new);
+        item.changeItemCreatedAt();
+        itemRepository.save(item);
+        return new MessageResponse("상품 끌올 성공");
+    }
+
     private MyPageResponse.DealRequestResponse toDealRequestResponse(DealRequest d) {
         return MyPageResponse.DealRequestResponse.builder()
                 .itemId(d.getItem().getId())

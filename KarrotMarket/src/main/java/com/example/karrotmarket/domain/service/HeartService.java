@@ -9,6 +9,7 @@ import com.example.karrotmarket.global.exception.ItemNotExistsException;
 import com.example.karrotmarket.domain.repository.HeartRepository;
 import com.example.karrotmarket.domain.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ public class HeartService {
     private final ItemRepository itemRepository;
     private final MemberFacade memberFacade;
 
+    @CacheEvict(value = "items", allEntries = true, cacheManager = "testCacheManager")
     public MessageResponse doLike(Long itemId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(ItemNotExistsException::new);

@@ -50,4 +50,8 @@ public class Item {
     public void addViewCount() {
         this.views += 1;
     }
+
+    public void changeItemCreatedAt() {
+        this.createdAt = LocalDateTime.now();
+    }
 }
