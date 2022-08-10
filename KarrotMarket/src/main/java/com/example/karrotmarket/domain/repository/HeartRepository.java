@@ -6,7 +6,7 @@ import com.example.karrotmarket.domain.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface HeartRepository extends JpaRepository<Heart, Long> {
-    boolean existsByMemberAndItem(Member member, Item item);
+    boolean existsByMemberIdAndItem(String memberId, Item item);
 
-    void deleteByMemberAndItem(Member member, Item item);
+    void deleteByMemberIdAndItem(String memberId, Item item);
 }

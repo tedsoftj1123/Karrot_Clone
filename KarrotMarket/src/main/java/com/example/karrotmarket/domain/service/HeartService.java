@@ -23,25 +23,25 @@ public class HeartService {
     public MessageResponse doLike(Long itemId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(ItemNotExistsException::new);
-        Member member = memberFacade.getCurrentUser();
-        if(heartRepository.existsByMemberAndItem(member, item)){
-            return unlike(member, item);
+        String memberId = memberFacade.getCurrentUser().getMemberId();
+        if(heartRepository.existsByMemberIdAndItem(memberId, item)){
+            return unlike(memberId, item);
         } else {
-            return like(member, item);
+            return like(memberId, item);
         }
     }
 
-    private MessageResponse like(Member member, Item item) {
+    private MessageResponse like(String memberId, Item item) {
         heartRepository.save(
                 Heart.builder()
-                        .member(member)
+                        .memberId(memberId)
                         .item(item)
                         .build()
         );
         return new MessageResponse("상품에 좋아요를 눌렀습니다.");
     }
-    private MessageResponse unlike(Member member, Item item) {
-        heartRepository.deleteByMemberAndItem(member, item);
+    private MessageResponse unlike(String memberId, Item item) {
+        heartRepository.deleteByMemberIdAndItem(memberId, item);
         return new MessageResponse("상품의 좋아요를 취소했습니다.");
     }
 }
