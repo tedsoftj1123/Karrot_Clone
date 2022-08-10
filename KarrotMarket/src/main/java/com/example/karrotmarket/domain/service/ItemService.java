@@ -59,13 +59,13 @@ public class ItemService {
 
     @Cacheable(value = "items", cacheManager = "testCacheManager")
     public List<ShowAllItemsResponse> main() {
-        String memberId = memberFacade.getCurrentUser().getMemberId();
-        return itemRepository.findAllByOrderByIdDesc().stream()
+        Member member = memberFacade.getCurrentUser();
+        return itemRepository.findAllByOrderByCreatedAtDesc().stream()
                 .filter(i -> i.getItemStatus().equals(ItemStatus.SALE))
                 .map(item -> ShowAllItemsResponse.builder()
                         .itemId(item.getId())
                         .itemName(item.getItemName())
-                        .liked(heartRepository.existsByMemberIdAndItem(memberId, item))
+                        .liked(heartRepository.existsByMemberAndItem(member, item))
                         .location(item.getMember().getAddress().getDong())
                         .price(item.getPrice())
                         .likeCount(item.getLikeCount().size())
@@ -75,7 +75,7 @@ public class ItemService {
     @Transactional
     @Cacheable(value = "ItemDetailResponse", key = "#itemId", cacheManager = "testCacheManager")
     public ItemDetailResponse itemDetail(Long itemId) {
-        final String memberId = memberFacade.getCurrentUser().getMemberId();
+        final Member member = memberFacade.getCurrentUser();
         final Item item = itemRepository.findById(itemId)
                 .orElseThrow(ItemNotExistsException::new);
         item.addViewCount();
@@ -85,7 +85,7 @@ public class ItemService {
                 .itemCategory(item.getCategory())
                 .itemImgUrl(item.getItemImgUrl())
                 .negotiable(item.isNegotiable())
-                .liked(heartRepository.existsByMemberIdAndItem(memberId, item))
+                .liked(heartRepository.existsByMemberAndItem(member, item))
                 .memberName(item.getMember().getMemberName())
                 .memberLocation(item.getMember().getAddress().getCity() + " " + item.getMember().getAddress().getDong())
                 .price(item.getPrice())

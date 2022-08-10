@@ -13,7 +13,9 @@ public class Heart {
     @Id @GeneratedValue
     private Long id;
 
-    private String memberId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")

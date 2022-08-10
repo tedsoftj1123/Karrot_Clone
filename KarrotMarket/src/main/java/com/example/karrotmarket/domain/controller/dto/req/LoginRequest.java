@@ -12,7 +12,6 @@ import javax.validation.constraints.NotBlank;
 public class LoginRequest {
     @NotBlank(message = "email은 공백일 수 없습니다.")
     @Email(message = "email형식이 잘못되었습니다.")
-    @Min(5)
     private String email;
 
     @NotBlank(message = "password는 공백일 수 없습니다.")
