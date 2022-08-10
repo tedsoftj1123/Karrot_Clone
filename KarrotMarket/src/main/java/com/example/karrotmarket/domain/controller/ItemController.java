@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,7 +20,7 @@ public class ItemController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AddItemResponse addItem(@RequestBody ItemRequest itemRequest) {
+    public AddItemResponse addItem(@Valid @RequestBody ItemRequest itemRequest) {
         return itemService.addItem(itemRequest);
     }
     @GetMapping
