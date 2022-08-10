@@ -61,6 +61,7 @@ public class ItemService {
     public List<ShowAllItemsResponse> main() {
         Member member = memberFacade.getCurrentUser();
         return itemRepository.findAllByOrderByCreatedAtDesc().stream()
+                .filter(item -> item.getMember().getAddress().getDong().equals(member.getAddress().getDong()))
                 .filter(i -> i.getItemStatus().equals(ItemStatus.SALE))
                 .map(item -> ShowAllItemsResponse.builder()
                         .itemId(item.getId())
