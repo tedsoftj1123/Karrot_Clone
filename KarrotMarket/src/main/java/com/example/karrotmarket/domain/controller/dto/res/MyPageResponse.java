@@ -21,7 +21,7 @@ public class MyPageResponse {
 
     private final Address memberAddress;
 
-    private final List<List<DealRequestResponse>> inComingAndOutComingDealRequests;
+    private final List<DealRequestResponse> outComingDealRequests;
     private final List<ItemResponse> memberItems;
 
     @Builder @Getter

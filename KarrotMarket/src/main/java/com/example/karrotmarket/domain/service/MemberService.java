@@ -1,6 +1,6 @@
 package com.example.karrotmarket.domain.service;
 
-import com.example.karrotmarket.domain.controller.dto.req.HandleDealRequest;
+
 import com.example.karrotmarket.domain.controller.dto.res.MessageResponse;
 import com.example.karrotmarket.domain.controller.dto.res.MyPageResponse;
 import com.example.karrotmarket.domain.entity.DealRequest;
@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,15 +27,12 @@ public class MemberService {
     private final ItemRepository itemRepository;
     @Transactional(readOnly = true)
     public MyPageResponse my() {
-        Member member = memberFacade.getCurrentUser();
-        List<MyPageResponse.DealRequestResponse> inComingDealRequests = member.getDealRequests().stream()
-                .map(this::toDealRequestResponse)
-                .collect(Collectors.toList());
-        List<MyPageResponse.DealRequestResponse> outComingDealRequests = dealRequestRepository.findAllByDealMemberId(member.getMemberId())
+        Member currentUser = memberFacade.getCurrentUser();
+        List<MyPageResponse.DealRequestResponse> outComingDealRequests = dealRequestRepository.findAllByDealMemberId(currentUser.getMemberId())
                 .stream().map(
                         this::toDealRequestResponse
                 ).collect(Collectors.toList());
-        List<MyPageResponse.ItemResponse> memberItems = member.getItems().stream().map(
+        List<MyPageResponse.ItemResponse> memberItems = currentUser.getItems().stream().map(
                 item -> MyPageResponse.ItemResponse.builder()
                         .itemName(item.getItemName())
                         .itemDescription(item.getItemDescription())
@@ -46,17 +42,21 @@ public class MemberService {
                         .itemStatus(item.getItemStatus())
                         .build()
         ).collect(Collectors.toList());
-        List<List<MyPageResponse.DealRequestResponse>> joined = new ArrayList<>();
-        joined.add(inComingDealRequests);
-        joined.add(outComingDealRequests);
         return MyPageResponse.builder()
-                .memberId(member.getMemberId())
-                .memberName(member.getMemberName())
-                .memberEmail(member.getMemberEmail())
-                .memberAddress(member.getAddress())
+                .memberId(currentUser.getMemberId())
+                .memberName(currentUser.getMemberName())
+                .memberEmail(currentUser.getMemberEmail())
+                .memberAddress(currentUser.getAddress())
                 .memberItems(memberItems)
-                .inComingAndOutComingDealRequests(joined)
+                .outComingDealRequests(outComingDealRequests)
                 .build();
+    }
+
+    public List<MyPageResponse.DealRequestResponse> inComingDealRequests() {
+        Member currentUser = memberFacade.getCurrentUser();
+        return currentUser.getDealRequests().stream()
+                .map(this::toDealRequestResponse)
+                .collect(Collectors.toList());
     }
 
     public MessageResponse acceptDealRequest(Long dealRequestId) {
