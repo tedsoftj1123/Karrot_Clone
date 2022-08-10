@@ -3,6 +3,7 @@ package com.example.karrotmarket.domain.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.DayOfWeek;
 
 @Entity
@@ -13,11 +14,11 @@ import java.time.DayOfWeek;
 public class DealRequest {
     @Id @GeneratedValue
     private Long id;
-
+    @NotNull
     private int price;
-
+    @NotNull
     private String location;
-
+    @NotNull
     private boolean isAccepted;
 
     @Embedded
@@ -34,7 +35,7 @@ public class DealRequest {
     @JoinColumn(name = "member_id")
     private Member member;
 
-
+    @NotNull
     private String dealMemberId;
 
     public void toAccepted() {

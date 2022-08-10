@@ -3,6 +3,7 @@ package com.example.karrotmarket.domain.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,12 +16,18 @@ public class Member {
     @Id @GeneratedValue
     private Long id;
 
+    @Size(max = 10)
+    @Column(unique = true)
     private String memberId;
 
+    @Size(max = 5)
     private String memberName;
 
+    @Size(max = 15)
+    @Column(unique = true)
     private String memberEmail;
 
+    @Size(min = 5, max = 20)
     private String memberPassword;
 
     @Embedded
