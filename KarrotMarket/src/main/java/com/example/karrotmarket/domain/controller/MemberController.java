@@ -37,7 +37,7 @@ public class MemberController {
         return memberService.turnUpItem(itemId);
     }
 
-    @PutMapping("/my/items/modify/{itemId}")
+    @PutMapping("/my/items/{itemId}")
     public MessageResponse modifyItem(@PathVariable Long itemId, @RequestBody ModifyItemRequest req) {
         return memberService.modifyItem(itemId, req);
     }

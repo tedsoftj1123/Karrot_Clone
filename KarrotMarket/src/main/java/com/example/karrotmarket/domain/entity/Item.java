@@ -67,6 +67,7 @@ public class Item {
         this.itemName = changeInfo.getItemName();
         this.itemDescription = changeInfo.getItemDescription();
         this.category = changeInfo.getItemCategory();
+        this.price = changeInfo.getItemPrice();
         this.negotiable = changeInfo.isItemNegotiable();
     }
 }

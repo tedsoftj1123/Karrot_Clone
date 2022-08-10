@@ -21,4 +21,7 @@ public class ModifyItemRequest {
 
     @NotNull
     private boolean itemNegotiable;
+
+    @NotNull
+    private int itemPrice;
 }

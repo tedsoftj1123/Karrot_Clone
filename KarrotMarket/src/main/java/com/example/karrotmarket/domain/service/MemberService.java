@@ -95,7 +95,7 @@ public class MemberService {
                 .timeDetail(d.getTimeDetail())
                 .build();
     }
-
+    @CacheEvict(value = "items", allEntries = true, cacheManager = "testCacheManager")
     public MessageResponse modifyItem(Long itemId, ModifyItemRequest req) {
         Member currentMember = memberFacade.getCurrentUser();
         Item item = itemRepository.findById(itemId)
