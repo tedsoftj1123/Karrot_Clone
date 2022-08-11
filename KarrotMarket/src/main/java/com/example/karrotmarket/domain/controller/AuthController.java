@@ -1,5 +1,6 @@
 package com.example.karrotmarket.domain.controller;
 
+import com.example.karrotmarket.domain.controller.dto.res.MessageResponse;
 import com.example.karrotmarket.domain.controller.dto.res.TokenRefreshResponse;
 import com.example.karrotmarket.domain.controller.dto.res.TokenResponse;
 import com.example.karrotmarket.domain.controller.dto.req.LoginRequest;
@@ -20,7 +21,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    public MemberResponseDto signup(@Valid @RequestBody SignupRequest req) {
+    public MessageResponse signup(@Valid @RequestBody SignupRequest req) {
         return authService.signup(req);
     }
 
