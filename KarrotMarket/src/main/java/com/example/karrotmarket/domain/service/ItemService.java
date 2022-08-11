@@ -31,7 +31,7 @@ public class ItemService {
     private final HeartRepository heartRepository;
 
     @Transactional
-    @CacheEvict(value = "items", allEntries = true, cacheManager = "testCacheManager")
+    @CacheEvict(value = "items", allEntries = true)
     public AddItemResponse addItem(ItemRequest req) {
         Member member = memberFacade.getCurrentUser();
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -57,7 +57,7 @@ public class ItemService {
                 .build();
     }
 
-    @Cacheable(value = "items", cacheManager = "testCacheManager")
+    @Cacheable(value = "items")
     public List<ShowAllItemsResponse> main() {
         Member member = memberFacade.getCurrentUser();
         return itemRepository.findAllByOrderByCreatedAtDesc().stream()
@@ -66,6 +66,7 @@ public class ItemService {
                 .map(item -> ShowAllItemsResponse.builder()
                         .itemId(item.getId())
                         .itemName(item.getItemName())
+                        .createdAt(item.getCreatedAt())
                         .liked(heartRepository.existsByMemberAndItem(member, item))
                         .location(item.getMember().getAddress().getDong())
                         .price(item.getPrice())
@@ -74,7 +75,7 @@ public class ItemService {
         ).collect(Collectors.toList());
     }
     @Transactional
-    @Cacheable(value = "ItemDetailResponse", key = "#itemId", cacheManager = "testCacheManager")
+    @Cacheable(value = "userItem", key = "#itemId")
     public ItemDetailResponse itemDetail(Long itemId) {
         final Member member = memberFacade.getCurrentUser();
         final Item item = itemRepository.findById(itemId)
