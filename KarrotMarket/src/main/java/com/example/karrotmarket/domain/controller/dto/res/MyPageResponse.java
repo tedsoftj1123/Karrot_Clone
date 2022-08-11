@@ -15,8 +15,6 @@ import java.util.List;
 public class MyPageResponse {
     private final String memberId;
 
-    private final String memberEmail;
-
     private final String memberName;
 
     private final Address memberAddress;

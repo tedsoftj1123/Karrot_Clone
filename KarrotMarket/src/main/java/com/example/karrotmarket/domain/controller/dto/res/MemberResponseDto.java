@@ -9,7 +9,5 @@ import lombok.Getter;
 public class MemberResponseDto {
     private final String email;
 
-    public static MemberResponseDto of(Member member) {
-        return new MemberResponseDto(member.getMemberEmail());
-    }
+
 }

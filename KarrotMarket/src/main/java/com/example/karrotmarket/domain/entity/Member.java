@@ -16,18 +16,14 @@ public class Member {
     @Id @GeneratedValue
     private Long id;
 
-    @Size(max = 10)
+    @Size(max = 20)
     @Column(unique = true)
     private String memberId;
 
     @Size(max = 5)
     private String memberName;
 
-    @Size(max = 15)
-    @Column(unique = true)
-    private String memberEmail;
-
-    @Size(min = 5, max = 20)
+    @Size(min = 5, max = 80)
     private String memberPassword;
 
     @Embedded
@@ -41,8 +37,4 @@ public class Member {
     private List<DealRequest> dealRequests = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
-    private List<Heart> hearts = new ArrayList<>();
-
-    @Enumerated(EnumType.STRING)
-    private Role role;
-}
+    private List<Heart> hearts = new ArrayList<>();}

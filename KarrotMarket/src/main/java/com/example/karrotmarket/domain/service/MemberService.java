@@ -49,7 +49,6 @@ public class MemberService {
         return MyPageResponse.builder()
                 .memberId(currentMember.getMemberId())
                 .memberName(currentMember.getMemberName())
-                .memberEmail(currentMember.getMemberEmail())
                 .memberAddress(currentMember.getAddress())
                 .memberItems(memberItems)
                 .outGoingDealRequests(outGoingDealRequests)

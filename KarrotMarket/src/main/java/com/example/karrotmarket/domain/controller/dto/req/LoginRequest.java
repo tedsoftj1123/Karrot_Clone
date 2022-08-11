@@ -10,9 +10,8 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @NoArgsConstructor
 public class LoginRequest {
-    @NotBlank(message = "email은 공백일 수 없습니다.")
-    @Email(message = "email형식이 잘못되었습니다.")
-    private String email;
+    @NotBlank(message = "memberId는 공백일 수 없습니다.")
+    private String memberId;
 
     @NotBlank(message = "password는 공백일 수 없습니다.")
     private String password;

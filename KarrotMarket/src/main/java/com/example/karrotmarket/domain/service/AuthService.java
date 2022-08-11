@@ -1,5 +1,6 @@
 package com.example.karrotmarket.domain.service;
 
+import com.example.karrotmarket.domain.controller.dto.res.MessageResponse;
 import com.example.karrotmarket.domain.controller.dto.res.TokenRefreshResponse;
 import com.example.karrotmarket.domain.controller.dto.res.TokenResponse;
 import com.example.karrotmarket.domain.controller.dto.req.LoginRequest;
@@ -27,15 +28,22 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
-    public MemberResponseDto signup(SignupRequest req) {
-        validateDuplicateMember(req.getMemberEmail());
+    public MessageResponse signup(SignupRequest req) {
+        validateDuplicateMember(req.getMemberId());
 
-        Member member = req.toMember(passwordEncoder);
-        return MemberResponseDto.of(memberRepository.save(member));
+       memberRepository.save(
+               Member.builder()
+                .memberId(req.getMemberId())
+                .memberName(req.getMemberName())
+                .address(req.getAddress())
+                .memberPassword(passwordEncoder.encode(req.getMemberPassword()))
+                .build()
+        );
+        return new MessageResponse(req.getMemberId() + "님의 회원가입이 완료되었습니다.");
     }
 
     public TokenResponse login(LoginRequest req) {
-        Member member = memberRepository.findByMemberEmail(req.getEmail())
+        Member member = memberRepository.findByMemberId(req.getMemberId())
                 .orElseThrow(UserNotFoundException::new);
 
         if(!passwordEncoder.matches(req.getPassword(), member.getMemberPassword())) {
@@ -47,7 +55,6 @@ public class AuthService {
         return TokenResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-                .accessTokenExpiresIn(jwtTokenProvider.getExpiredTime())
                 .build();
     }
     public TokenRefreshResponse reissue(String refreshToken) {
@@ -63,8 +70,8 @@ public class AuthService {
                 .refreshToken(newRefreshToken)
                 .build();
     }
-    private void validateDuplicateMember(String memberEmail) {
-        if(memberRepository.existsByMemberEmail(memberEmail)){
+    private void validateDuplicateMember(String memberId) {
+        if(memberRepository.existsByMemberId(memberId)){
             throw new UserAlreadyExistsException();
         }
     }

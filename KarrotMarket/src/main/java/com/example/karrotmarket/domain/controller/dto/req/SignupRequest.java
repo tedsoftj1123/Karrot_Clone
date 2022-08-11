@@ -1,39 +1,28 @@
 package com.example.karrotmarket.domain.controller.dto.req;
 
 import com.example.karrotmarket.domain.entity.Address;
-import com.example.karrotmarket.domain.entity.Member;
-import com.example.karrotmarket.domain.entity.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Getter
 @NoArgsConstructor
 public class SignupRequest {
-    @NotBlank(message = "id는 공백이나 뛰어쓰기를 허용하지 않습니다.")
+    @NotBlank(message = "id엔 공백과 뛰어쓰기를 포함 할 수 없습니다.")
+    @Length(max = 20)
     private String memberId;
 
-    @NotBlank(message = "name은 공백이나 뛰어쓰기를 허용하지 않습니다.")
+    @NotBlank(message = "name은 공백과 띄어쓰기를 포함 할 수 없습니다.")
+    @Length(max = 5)
     private String memberName;
 
-    @NotBlank(message = "email는 공백이나 뛰어쓰기를 허용하지 않습니다.")
-    @Email(message = "잘못된 email형식입니다.")
-    private String memberEmail;
-
-    @NotBlank(message = "password는 공백이나 뛰어쓰기를 허용하지 않습니다.")
+    @NotBlank(message = "passowrd는 공백과 띄어쓰기를 포함 할 수 없습니다.")
+    @Length(min = 5, max = 20)
     private String memberPassword;
+
     private Address address;
-    public Member toMember(PasswordEncoder passwordEncoder) {
-        return Member.builder()
-                .memberId(memberId)
-                .memberName(memberName)
-                .address(address)
-                .memberEmail(memberEmail)
-                .memberPassword(passwordEncoder.encode(memberPassword))
-                .role(Role.ROLE_USER)
-                .build();
-    }
 }
