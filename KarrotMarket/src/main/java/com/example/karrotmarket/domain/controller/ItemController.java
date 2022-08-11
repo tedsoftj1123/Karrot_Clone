@@ -4,6 +4,7 @@ import com.example.karrotmarket.domain.controller.dto.req.ItemRequest;
 import com.example.karrotmarket.domain.controller.dto.res.AddItemResponse;
 import com.example.karrotmarket.domain.controller.dto.res.ItemDetailResponse;
 import com.example.karrotmarket.domain.controller.dto.res.ShowAllItemsResponse;
+import com.example.karrotmarket.domain.entity.Category;
 import com.example.karrotmarket.domain.entity.Member;
 import com.example.karrotmarket.domain.facade.MemberFacade;
 import com.example.karrotmarket.domain.service.ItemService;
@@ -26,6 +27,12 @@ public class ItemController {
     public AddItemResponse addItem(@Valid @RequestBody ItemRequest itemRequest) {
         return itemService.addItem(itemRequest);
     }
+
+    @GetMapping("/category")
+    public List<ShowAllItemsResponse> findAllByCategory(@RequestParam Category category) {
+        return itemService.findAllByCategory(category);
+    }
+
     @GetMapping
     public List<ShowAllItemsResponse> main() {
         Member currentMember = memberFacade.getCurrentMember();

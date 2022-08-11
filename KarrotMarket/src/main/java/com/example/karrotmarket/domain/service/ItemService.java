@@ -4,6 +4,7 @@ import com.example.karrotmarket.domain.controller.dto.req.ItemRequest;
 import com.example.karrotmarket.domain.controller.dto.res.AddItemResponse;
 import com.example.karrotmarket.domain.controller.dto.res.ItemDetailResponse;
 import com.example.karrotmarket.domain.controller.dto.res.ShowAllItemsResponse;
+import com.example.karrotmarket.domain.entity.Category;
 import com.example.karrotmarket.domain.entity.Item;
 import com.example.karrotmarket.domain.entity.ItemStatus;
 import com.example.karrotmarket.domain.entity.Member;
@@ -94,5 +95,20 @@ public class ItemService {
                 .hits(item.getViews())
                 .likeCount(item.getLikeCount().size())
                 .build();
+    }
+
+    public List<ShowAllItemsResponse> findAllByCategory(Category category) {
+        Member currentMember = memberFacade.getCurrentMember();
+        return itemRepository.findAllByCategory(category).stream()
+                .map(item -> ShowAllItemsResponse.builder()
+                        .itemId(item.getId())
+                        .itemName(item.getItemName())
+                        .createdAt(item.getCreatedAt())
+                        .liked(heartRepository.existsByMemberAndItem(currentMember, item))
+                        .location(item.getMember().getAddress().getDong())
+                        .price(item.getPrice())
+                        .likeCount(item.getLikeCount().size())
+                        .build()
+                ).collect(Collectors.toList());
     }
 }
