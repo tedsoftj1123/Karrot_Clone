@@ -9,6 +9,7 @@ import com.example.karrotmarket.domain.entity.*;
 import com.example.karrotmarket.domain.facade.MemberFacade;
 import com.example.karrotmarket.domain.repository.ItemRepository;
 import com.example.karrotmarket.domain.repository.MemberRepository;
+import com.example.karrotmarket.global.exception.CannotTurnUpException;
 import com.example.karrotmarket.global.exception.DealRequestNotFound;
 import com.example.karrotmarket.domain.repository.DealRequestRepository;
 import com.example.karrotmarket.global.exception.ItemNotExistsException;
@@ -18,6 +19,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,8 +29,6 @@ public class MemberService {
     private final MemberFacade memberFacade;
     private final DealRequestRepository dealRequestRepository;
     private final ItemRepository itemRepository;
-
-    private final MemberRepository memberRepository;
     @Transactional(readOnly = true)
     public MyPageResponse my() {
         Member currentMember = memberFacade.getCurrentMember();
@@ -79,8 +79,13 @@ public class MemberService {
 
     @CacheEvict(value = "items", allEntries = true, cacheManager = "karrotCacheManager")
     public MessageResponse turnUpItem(Long itemId) {
+        Member currentMember = memberFacade.getCurrentMember();
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(ItemNotExistsException::new);
+        validateUser(item, currentMember);
+        if (LocalDateTime.now().minusDays(1L).isBefore(item.getCreatedAt())) {
+            throw new CannotTurnUpException();
+        }
         item.changeItemCreatedAt();
         itemRepository.save(item);
         return new MessageResponse("상품 끌올 성공");
