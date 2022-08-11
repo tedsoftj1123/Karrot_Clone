@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
-@RequestMapping("/main")
+@RequestMapping("/item/deal-request")
 @RestController
 public class DealRequestController {
     private final DealRequestService dealRequestService;
 
-    @PostMapping("/{todoId}")
-    public MessageResponse sendDealRequest(@PathVariable Long todoId, @Valid @RequestBody UserDealRequest req) {
-        return dealRequestService.sendDealRequest(todoId, req);
+    @PostMapping("/{itemId}")
+    public MessageResponse sendDealRequest(@PathVariable Long itemId, @Valid @RequestBody UserDealRequest req) {
+        return dealRequestService.sendDealRequest(itemId, req);
     }
 }

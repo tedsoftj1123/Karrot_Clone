@@ -4,6 +4,8 @@ import com.example.karrotmarket.domain.controller.dto.req.ItemRequest;
 import com.example.karrotmarket.domain.controller.dto.res.AddItemResponse;
 import com.example.karrotmarket.domain.controller.dto.res.ItemDetailResponse;
 import com.example.karrotmarket.domain.controller.dto.res.ShowAllItemsResponse;
+import com.example.karrotmarket.domain.entity.Member;
+import com.example.karrotmarket.domain.facade.MemberFacade;
 import com.example.karrotmarket.domain.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import java.util.List;
 @RequestMapping("/item")
 public class ItemController {
     private final ItemService itemService;
+    private final MemberFacade memberFacade;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -25,7 +28,8 @@ public class ItemController {
     }
     @GetMapping
     public List<ShowAllItemsResponse> main() {
-        return itemService.main();
+        Member currentMember = memberFacade.getCurrentMember();
+        return itemService.main(currentMember);
     }
     @GetMapping("/{itemId}")
     public ItemDetailResponse itemDetail(@PathVariable Long itemId) {

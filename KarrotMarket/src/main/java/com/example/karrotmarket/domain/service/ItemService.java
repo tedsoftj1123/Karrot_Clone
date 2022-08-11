@@ -57,9 +57,9 @@ public class ItemService {
                 .build();
     }
 
-    @Cacheable(value = "items")
-    public List<ShowAllItemsResponse> main() {
-        Member currentMember = memberFacade.getCurrentMember();
+    @Cacheable(value = "items", key = "#currentMember.address.city")
+    public List<ShowAllItemsResponse> main(Member currentMember) {
+
         return itemRepository.findAllByOrderByCreatedAtDesc().stream()
                 .filter(item -> item.getMember().getAddress().getCity().equals(currentMember.getAddress().getCity()))
                 .filter(i -> i.getItemStatus().equals(ItemStatus.SALE))

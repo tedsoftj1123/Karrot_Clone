@@ -12,5 +12,4 @@ import java.time.ZonedDateTime;
 public class TokenResponse {
     private String accessToken;
     private String refreshToken;
-    private ZonedDateTime accessTokenExpiresIn;
 }
