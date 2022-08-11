@@ -64,9 +64,6 @@ public class JwtTokenProvider {
         }
         return null;
     }
-    public ZonedDateTime getExpiredTime() {
-        return ZonedDateTime.now().plusSeconds(jwtProperties.getAccessExp());
-    }
 
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = authDetailsService
