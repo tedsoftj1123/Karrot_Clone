@@ -3,6 +3,7 @@ package com.example.karrotmarket.domain.controller;
 import com.example.karrotmarket.domain.controller.dto.req.ModifyItemRequest;
 import com.example.karrotmarket.domain.controller.dto.res.MessageResponse;
 import com.example.karrotmarket.domain.controller.dto.res.MyPageResponse;
+import com.example.karrotmarket.domain.controller.dto.res.ShowAllItemsResponse;
 import com.example.karrotmarket.domain.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +36,11 @@ public class MemberController {
     @PatchMapping("/my/items/{itemId}")
     public MessageResponse turnUpItem(@PathVariable Long itemId) {
         return memberService.turnUpItem(itemId);
+    }
+
+    @GetMapping("/my/hearts")
+    public List<ShowAllItemsResponse> bookMark() {
+        return memberService.bookMark();
     }
 
     @PutMapping("/my/items/{itemId}")

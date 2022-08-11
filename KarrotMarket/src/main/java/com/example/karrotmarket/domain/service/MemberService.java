@@ -4,12 +4,11 @@ package com.example.karrotmarket.domain.service;
 import com.example.karrotmarket.domain.controller.dto.req.ModifyItemRequest;
 import com.example.karrotmarket.domain.controller.dto.res.MessageResponse;
 import com.example.karrotmarket.domain.controller.dto.res.MyPageResponse;
-import com.example.karrotmarket.domain.entity.DealRequest;
-import com.example.karrotmarket.domain.entity.Item;
-import com.example.karrotmarket.domain.entity.ItemStatus;
-import com.example.karrotmarket.domain.entity.Member;
+import com.example.karrotmarket.domain.controller.dto.res.ShowAllItemsResponse;
+import com.example.karrotmarket.domain.entity.*;
 import com.example.karrotmarket.domain.facade.MemberFacade;
 import com.example.karrotmarket.domain.repository.ItemRepository;
+import com.example.karrotmarket.domain.repository.MemberRepository;
 import com.example.karrotmarket.global.exception.DealRequestNotFound;
 import com.example.karrotmarket.domain.repository.DealRequestRepository;
 import com.example.karrotmarket.global.exception.ItemNotExistsException;
@@ -28,6 +27,8 @@ public class MemberService {
     private final MemberFacade memberFacade;
     private final DealRequestRepository dealRequestRepository;
     private final ItemRepository itemRepository;
+
+    private final MemberRepository memberRepository;
     @Transactional(readOnly = true)
     public MyPageResponse my() {
         Member currentMember = memberFacade.getCurrentMember();
@@ -83,6 +84,21 @@ public class MemberService {
         item.changeItemCreatedAt();
         itemRepository.save(item);
         return new MessageResponse("상품 끌올 성공");
+    }
+
+    public List<ShowAllItemsResponse> bookMark() {
+        Member currentMember = memberFacade.getCurrentMember();
+        return currentMember.getHearts().stream()
+                .map(Heart::getItem)
+                .map(item -> ShowAllItemsResponse.builder()
+                        .itemId(item.getId())
+                        .itemName(item.getItemName())
+                        .createdAt(item.getCreatedAt())
+                        .location(item.getMember().getAddress().getDong())
+                        .price(item.getPrice())
+                        .likeCount(item.getLikeCount().size())
+                        .build()
+                ).collect(Collectors.toList());
     }
 
     private MyPageResponse.DealRequestResponse toDealRequestResponse(DealRequest d) {
