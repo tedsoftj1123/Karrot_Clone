@@ -21,16 +21,17 @@ public class MyPageResponse {
 
     private final Address memberAddress;
 
-    private final List<DealRequestResponse> outComingDealRequests;
+    private final List<DealRequestResponse> outGoingDealRequests;
     private final List<ItemResponse> memberItems;
 
     @Builder @Getter
     public static class DealRequestResponse {
         private final Long itemId;
+        private final ItemStatus itemStatus;
         private final int price;
         private final DealRequestTimeDetail timeDetail;
         private final DealRequestLocationDetail locationDetail;
-        private final String dealMember;
+        private final String itemBuyerId;
     }
 
     @Builder @Getter

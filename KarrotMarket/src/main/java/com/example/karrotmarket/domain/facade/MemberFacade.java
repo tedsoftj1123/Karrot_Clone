@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class MemberFacade {
     private final MemberRepository memberRepository;
 
-    public Member getCurrentUser() {
+    public Member getCurrentMember() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (!(principal instanceof UserDetails)) {

@@ -30,12 +30,12 @@ public class MemberService {
     private final ItemRepository itemRepository;
     @Transactional(readOnly = true)
     public MyPageResponse my() {
-        Member currentUser = memberFacade.getCurrentUser();
-        List<MyPageResponse.DealRequestResponse> outComingDealRequests = dealRequestRepository.findAllByDealMemberId(currentUser.getMemberId())
+        Member currentMember = memberFacade.getCurrentMember();
+        List<MyPageResponse.DealRequestResponse> outGoingDealRequests = currentMember.getDealRequests()
                 .stream().map(
                         this::toDealRequestResponse
                 ).collect(Collectors.toList());
-        List<MyPageResponse.ItemResponse> memberItems = currentUser.getItems().stream().map(
+        List<MyPageResponse.ItemResponse> memberItems = currentMember.getItems().stream().map(
                 item -> MyPageResponse.ItemResponse.builder()
                         .itemId(item.getId())
                         .itemName(item.getItemName())
@@ -47,18 +47,18 @@ public class MemberService {
                         .build()
         ).collect(Collectors.toList());
         return MyPageResponse.builder()
-                .memberId(currentUser.getMemberId())
-                .memberName(currentUser.getMemberName())
-                .memberEmail(currentUser.getMemberEmail())
-                .memberAddress(currentUser.getAddress())
+                .memberId(currentMember.getMemberId())
+                .memberName(currentMember.getMemberName())
+                .memberEmail(currentMember.getMemberEmail())
+                .memberAddress(currentMember.getAddress())
                 .memberItems(memberItems)
-                .outComingDealRequests(outComingDealRequests)
+                .outGoingDealRequests(outGoingDealRequests)
                 .build();
     }
 
     public List<MyPageResponse.DealRequestResponse> inComingDealRequests() {
-        Member currentUser = memberFacade.getCurrentUser();
-        return currentUser.getDealRequests().stream()
+        Member currentMember = memberFacade.getCurrentMember();
+        return dealRequestRepository.findAllByItemOwner(currentMember.getMemberId()).stream()
                 .map(this::toDealRequestResponse)
                 .collect(Collectors.toList());
     }
@@ -77,7 +77,7 @@ public class MemberService {
         return new MessageResponse("거래 요청이 거절되었습니다.");
     }
 
-    @CacheEvict(value = "items", allEntries = true, cacheManager = "testCacheManager")
+    @CacheEvict(value = "items", allEntries = true, cacheManager = "karrotCacheManager")
     public MessageResponse turnUpItem(Long itemId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(ItemNotExistsException::new);
@@ -89,15 +89,16 @@ public class MemberService {
     private MyPageResponse.DealRequestResponse toDealRequestResponse(DealRequest d) {
         return MyPageResponse.DealRequestResponse.builder()
                 .itemId(d.getItem().getId())
-                .dealMember(d.getDealMemberId())
+                .itemBuyerId(d.getItemBuyer().getMemberId())
                 .price(d.getPrice())
+                .itemStatus(d.getItem().getItemStatus())
                 .locationDetail(d.getLocationDetail())
                 .timeDetail(d.getTimeDetail())
                 .build();
     }
-    @CacheEvict(value = "items", allEntries = true, cacheManager = "testCacheManager")
+    @CacheEvict(value = "items", allEntries = true, cacheManager = "karrotCacheManager")
     public MessageResponse modifyItem(Long itemId, ModifyItemRequest req) {
-        Member currentMember = memberFacade.getCurrentUser();
+        Member currentMember = memberFacade.getCurrentMember();
         Item item = itemRepository.findById(itemId)
                         .orElseThrow(ItemNotExistsException :: new);
         validateUser(item, currentMember);

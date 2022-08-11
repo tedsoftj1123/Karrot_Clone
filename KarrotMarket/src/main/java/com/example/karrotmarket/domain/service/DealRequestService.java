@@ -24,10 +24,10 @@ public class DealRequestService {
 
     @Transactional
     public MessageResponse sendDealRequest(Long todoId, UserDealRequest req) {
-        Member member = memberFacade.getCurrentUser();
+        Member currentMember = memberFacade.getCurrentMember();
         Item item = itemRepository.findById(todoId)
                 .orElseThrow(ItemNotExistsException::new);
-        if (dealRequestRepository.existsByMemberAndItem(member, item)) {
+        if (dealRequestRepository.existsByItemBuyerAndItem(currentMember, item)) {
             throw new DealRequestAlreadyExistsException();
         }
         if(!item.isNegotiable() && req.getPrice()!=item.getPrice()){
@@ -37,8 +37,8 @@ public class DealRequestService {
         dealRequestRepository.save(
                 DealRequest.builder()
                         .item(item)
-                        .member(member)
-                        .dealMemberId(member.getMemberId())
+                        .itemOwner(item.getMember().getMemberId())
+                        .itemBuyer(currentMember)
                         .timeDetail(req.getTimeDetail())
                         .locationDetail(req.getLocationDetail())
                         .price(req.getPrice())

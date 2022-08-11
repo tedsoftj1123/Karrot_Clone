@@ -33,7 +33,7 @@ public class ItemService {
     @Transactional
     @CacheEvict(value = "items", allEntries = true)
     public AddItemResponse addItem(ItemRequest req) {
-        Member member = memberFacade.getCurrentUser();
+        Member currentMember = memberFacade.getCurrentMember();
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/item/download-img")
                 .queryParam("fileName", req.getItemName())
@@ -48,26 +48,26 @@ public class ItemService {
                         .itemStatus(ItemStatus.SALE)
                         .createdAt(LocalDateTime.now())
                         .price(req.getItemPrice())
-                        .member(member)
+                        .member(currentMember)
                         .build()
         );
         return AddItemResponse.builder()
                 .itemName(req.getItemName())
-                .memberName(member.getMemberName())
+                .memberName(currentMember.getMemberName())
                 .build();
     }
 
     @Cacheable(value = "items")
     public List<ShowAllItemsResponse> main() {
-        Member member = memberFacade.getCurrentUser();
+        Member currentMember = memberFacade.getCurrentMember();
         return itemRepository.findAllByOrderByCreatedAtDesc().stream()
-                .filter(item -> item.getMember().getAddress().getDong().equals(member.getAddress().getDong()))
+                .filter(item -> item.getMember().getAddress().getCity().equals(currentMember.getAddress().getCity()))
                 .filter(i -> i.getItemStatus().equals(ItemStatus.SALE))
                 .map(item -> ShowAllItemsResponse.builder()
                         .itemId(item.getId())
                         .itemName(item.getItemName())
                         .createdAt(item.getCreatedAt())
-                        .liked(heartRepository.existsByMemberAndItem(member, item))
+                        .liked(heartRepository.existsByMemberAndItem(currentMember, item))
                         .location(item.getMember().getAddress().getDong())
                         .price(item.getPrice())
                         .likeCount(item.getLikeCount().size())
@@ -77,7 +77,7 @@ public class ItemService {
     @Transactional
     @Cacheable(value = "userItem", key = "#itemId")
     public ItemDetailResponse itemDetail(Long itemId) {
-        final Member member = memberFacade.getCurrentUser();
+        final Member member = memberFacade.getCurrentMember();
         final Item item = itemRepository.findById(itemId)
                 .orElseThrow(ItemNotExistsException::new);
         item.addViewCount();

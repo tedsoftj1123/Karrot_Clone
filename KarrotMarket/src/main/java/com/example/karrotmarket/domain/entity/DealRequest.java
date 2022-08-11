@@ -17,8 +17,6 @@ public class DealRequest {
     @NotNull
     private int price;
     @NotNull
-    private String location;
-    @NotNull
     private boolean isAccepted;
 
     @Embedded
@@ -33,10 +31,10 @@ public class DealRequest {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member member;
+    private Member itemBuyer;
 
     @NotNull
-    private String dealMemberId;
+    private String itemOwner;
 
     public void toAccepted() {
         this.isAccepted = true;

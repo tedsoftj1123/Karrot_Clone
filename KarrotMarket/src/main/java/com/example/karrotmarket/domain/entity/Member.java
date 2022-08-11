@@ -36,7 +36,8 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Item> items = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    //내가 보낸 거래요청
+    @OneToMany(mappedBy = "itemBuyer")
     private List<DealRequest> dealRequests = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")

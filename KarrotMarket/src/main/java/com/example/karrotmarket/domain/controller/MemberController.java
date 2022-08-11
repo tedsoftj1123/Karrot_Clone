@@ -17,11 +17,11 @@ public class MemberController {
     @GetMapping("/my")
     public MyPageResponse myPage() {
         return memberService.my();
-    }
+    } // 내가 보낸 거래요청조회
 
     @GetMapping("/my/deal-requests")
     public List<MyPageResponse.DealRequestResponse> inComingDealRequests() {
-        return memberService.inComingDealRequests();
+        return memberService.inComingDealRequests(); // 내가 받은 거래요청 조회
     }
     @PatchMapping("/my/deal-requests/{dealRequestId}")
     public MessageResponse acceptDealRequest(@PathVariable Long dealRequestId) {

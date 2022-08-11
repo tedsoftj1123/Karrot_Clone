@@ -21,11 +21,11 @@ public class HeartService {
     private final ItemRepository itemRepository;
     private final MemberFacade memberFacade;
 
-    @CacheEvict(value = "items", allEntries = true, cacheManager = "testCacheManager")
+    @CacheEvict(value = "items", allEntries = true, cacheManager = "karrotCacheManager")
     public MessageResponse doLike(Long itemId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(ItemNotExistsException::new);
-        Member member = memberFacade.getCurrentUser();
+        Member member = memberFacade.getCurrentMember();
         if(heartRepository.existsByMemberAndItem(member, item)){
             return unlike(member, item);
         } else {
