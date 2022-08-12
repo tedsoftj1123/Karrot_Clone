@@ -16,5 +16,7 @@ public enum Category {
     BOOKS,
     TICKET_EXCHANGETICKET,
     PROCESSED_FOOD,
-    PET_SUPPLIES
+    PET_SUPPLIES,
+    PLANTS,
+    OTHERS
 }
