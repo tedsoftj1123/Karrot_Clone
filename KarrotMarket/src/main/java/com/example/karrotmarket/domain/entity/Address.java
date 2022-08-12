@@ -15,8 +15,8 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 public class Address {
 
-    @NotBlank
+    @NotBlank(message = "도시를 입력해주세요")
     private String city;
-    @NotBlank
+    @NotBlank(message = "동을 입력해주세요")
     private String dong;
 }

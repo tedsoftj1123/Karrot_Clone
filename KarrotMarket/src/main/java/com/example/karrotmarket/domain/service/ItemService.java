@@ -34,9 +34,10 @@ public class ItemService {
     @Transactional
     @CacheEvict(value = "items", allEntries = true)
     public AddItemResponse addItem(ItemRequest req) {
+        System.out.println(req.isNegotiable());
         Member currentMember = memberFacade.getCurrentMember();
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/item/download-img")
+                .path("/items/download-img")
                 .queryParam("fileName", req.getItemName())
                 .toUriString();
         itemRepository.save(
@@ -76,7 +77,7 @@ public class ItemService {
         ).collect(Collectors.toList());
     }
     @Transactional
-    @Cacheable(value = "userItem", key = "#itemId")
+    @Cacheable(value = "itemDetail", key = "#itemId")
     public ItemDetailResponse itemDetail(Long itemId) {
         Member member = memberFacade.getCurrentMember();
         Item item = itemRepository.findById(itemId)
@@ -96,7 +97,6 @@ public class ItemService {
                 .likeCount(item.getLikeCount().size())
                 .build();
     }
-
     public List<ShowAllItemsResponse> findAllByCategory(Category category) {
         Member currentMember = memberFacade.getCurrentMember();
         return itemRepository.findAllByCategory(category).stream()
@@ -111,4 +111,6 @@ public class ItemService {
                         .build()
                 ).collect(Collectors.toList());
     }
+
+
 }

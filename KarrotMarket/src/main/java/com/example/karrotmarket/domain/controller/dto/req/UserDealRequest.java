@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.time.DayOfWeek;
 
 @Getter
@@ -13,5 +14,6 @@ import java.time.DayOfWeek;
 public class UserDealRequest {
     private DealRequestTimeDetail timeDetail;
     private DealRequestLocationDetail locationDetail;
+    @NotNull(message = "희망 거래 금액을 입력해주세요")
     private int price;
 }
