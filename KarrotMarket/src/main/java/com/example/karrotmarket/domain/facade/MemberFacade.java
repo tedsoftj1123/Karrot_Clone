@@ -4,6 +4,7 @@ import com.example.karrotmarket.domain.controller.dto.res.MyPageResponse;
 import com.example.karrotmarket.domain.entity.Item;
 import com.example.karrotmarket.domain.entity.Member;
 import com.example.karrotmarket.global.exception.NoAuthorityException;
+import com.example.karrotmarket.global.exception.NonLoginException;
 import com.example.karrotmarket.global.exception.UserNotFoundException;
 import com.example.karrotmarket.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,8 @@ public class MemberFacade {
 
     public Member getCurrentMember() {
         String userId = SecurityContextHolder.getContext().getAuthentication().getName();
-
+        if(userId.equals("anonymousUser"))
+            throw new NonLoginException();
         return memberRepository.findByMemberId(userId)
                 .orElseThrow(UserNotFoundException::new);
     }

@@ -17,7 +17,6 @@ public class ShowAllItemsResponse {
     private LocalDateTime createdAt;
     private int price;
     private int likeCount;
-    private int itemDealRequestCount;
 
 
 }

@@ -22,7 +22,6 @@ public class ImgService {
 
     @Autowired
     public ImgService(FileUploadProperties fileUploadProperties) {
-        System.out.println(fileUploadProperties.getFileUploadLocation());
         this.fileStoreLocation = Paths.get(fileUploadProperties.getFileUploadLocation())
                 .toAbsolutePath().normalize();
 

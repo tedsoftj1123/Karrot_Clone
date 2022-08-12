@@ -5,7 +5,6 @@ import com.example.karrotmarket.domain.controller.dto.res.TokenRefreshResponse;
 import com.example.karrotmarket.domain.controller.dto.res.TokenResponse;
 import com.example.karrotmarket.domain.controller.dto.req.LoginRequest;
 import com.example.karrotmarket.domain.controller.dto.req.SignupRequest;
-import com.example.karrotmarket.domain.controller.dto.res.MemberResponseDto;
 import com.example.karrotmarket.domain.entity.Member;
 import com.example.karrotmarket.domain.entity.RefreshToken;
 import com.example.karrotmarket.global.exception.RefreshTokenNotFoundException;
@@ -64,7 +63,6 @@ public class AuthService {
         String newAccessToken = jwtTokenProvider.generateAccessToken(userRefreshToken.getKey());
         return TokenRefreshResponse.builder()
                 .accessToken(newAccessToken)
-                .refreshToken(refreshToken)
                 .build();
     }
     private void validateDuplicateMember(String memberId) {

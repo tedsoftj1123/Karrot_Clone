@@ -8,6 +8,7 @@ import com.example.karrotmarket.domain.entity.Member;
 import com.example.karrotmarket.domain.facade.MemberFacade;
 import com.example.karrotmarket.global.exception.CannotNegoException;
 import com.example.karrotmarket.global.exception.DealRequestAlreadyExistsException;
+import com.example.karrotmarket.global.exception.DealRequestNotFound;
 import com.example.karrotmarket.global.exception.ItemNotExistsException;
 import com.example.karrotmarket.domain.repository.DealRequestRepository;
 import com.example.karrotmarket.domain.repository.ItemRepository;
@@ -51,6 +52,5 @@ public class DealRequestService {
                 + item.getItemName() + "에 거래 요청을 전송했습니다.";
         return new MessageResponse(resMsg);
     }
-
 
 }

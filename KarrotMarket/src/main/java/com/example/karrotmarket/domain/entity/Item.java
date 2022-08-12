@@ -28,7 +28,6 @@ public class Item {
     private LocalDateTime createdAt;
     @NotNull
     private int price;
-    @NotNull
     private boolean negotiable;
 
     @Enumerated(EnumType.STRING)

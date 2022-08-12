@@ -5,7 +5,6 @@ import com.example.karrotmarket.domain.controller.dto.res.TokenRefreshResponse;
 import com.example.karrotmarket.domain.controller.dto.res.TokenResponse;
 import com.example.karrotmarket.domain.controller.dto.req.LoginRequest;
 import com.example.karrotmarket.domain.controller.dto.req.SignupRequest;
-import com.example.karrotmarket.domain.controller.dto.res.MemberResponseDto;
 import com.example.karrotmarket.domain.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
