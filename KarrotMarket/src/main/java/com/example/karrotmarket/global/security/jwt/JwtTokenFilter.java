@@ -19,7 +19,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         String bearer = jwtTokenProvider.resolveToken(request);
-        if (bearer != null && jwtTokenProvider.validateToken(bearer)) {
+        if (bearer != null && jwtTokenProvider.validateAccessToken(bearer)) {
             Authentication authentication = jwtTokenProvider.getAuthentication(bearer);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }

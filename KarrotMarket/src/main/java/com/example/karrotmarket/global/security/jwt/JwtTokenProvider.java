@@ -75,12 +75,23 @@ public class JwtTokenProvider {
         return Jwts.parserBuilder().setSigningKey(jwtProperties.getSecretKey()).build().parseClaimsJws(token).getBody().getSubject();
     }
 
-    public boolean validateToken(String jwtToken) {
+    public boolean validateAccessToken(String jwtToken) {
         try {
             Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(jwtProperties.getSecretKey()).build().parseClaimsJws(jwtToken);
             return !claims.getBody().getExpiration().before(new Date());
         } catch (io.jsonwebtoken.ExpiredJwtException e) {
             throw new com.example.karrotmarket.global.exception.ExpiredJwtException();
+        } catch (Exception e) {
+            throw new InvalidJwtException();
+        }
+    }
+
+    public void validateRefreshToken(String refreshToken) {
+        try {
+            Jwts.parserBuilder().setSigningKey(jwtProperties.getSecretKey()).build()
+                    .parseClaimsJws(refreshToken);
+        } catch (io.jsonwebtoken.ExpiredJwtException e) {
+            throw new com.example.karrotmarket.global.exception.RefreshTokenExpiredException();
         } catch (Exception e) {
             throw new InvalidJwtException();
         }

@@ -15,6 +15,7 @@ public enum ErrorCode {
 
     INVALID_JWT(401, "Invalid jwt"),
     EXPIRED_JWT(401, "Expired Jwt"),
+    EXPIRED_REFRESH(401, "RefreshToken Expired, please login again"),
     WRONG_PASSWORD(401, "Wrong password"),
     REFRESH_TOKEN_NOT_FOUND(404, "RefreshToken not found"),
 

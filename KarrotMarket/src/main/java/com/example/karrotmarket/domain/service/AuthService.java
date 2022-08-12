@@ -60,14 +60,11 @@ public class AuthService {
     public TokenRefreshResponse reissue(String refreshToken) {
         RefreshToken userRefreshToken = refreshTokenRepository.findByKey(jwtTokenProvider.getUserPk(refreshToken))
                 .orElseThrow(RefreshTokenNotFoundException::new);
-
-        String newRefreshToken = jwtTokenProvider.generateRefreshToken(userRefreshToken.getKey());
-        userRefreshToken.updateValue(newRefreshToken);
-
-        String accessToken = jwtTokenProvider.generateAccessToken(userRefreshToken.getKey());
+        jwtTokenProvider.validateRefreshToken(userRefreshToken.getValue());
+        String newAccessToken = jwtTokenProvider.generateAccessToken(userRefreshToken.getKey());
         return TokenRefreshResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(newRefreshToken)
+                .accessToken(newAccessToken)
+                .refreshToken(refreshToken)
                 .build();
     }
     private void validateDuplicateMember(String memberId) {
