@@ -29,12 +29,12 @@ public class Member {
     @Embedded
     private Address address;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Item> items = new ArrayList<>();
 
     //내가 보낸 거래요청
-    @OneToMany(mappedBy = "itemBuyer")
+    @OneToMany(mappedBy = "itemBuyer", cascade = CascadeType.REMOVE)
     private List<DealRequest> dealRequests = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Heart> hearts = new ArrayList<>();}

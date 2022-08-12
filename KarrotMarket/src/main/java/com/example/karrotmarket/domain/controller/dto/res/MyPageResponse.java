@@ -29,6 +29,7 @@ public class MyPageResponse {
         private final int price;
         private final DealRequestTimeDetail timeDetail;
         private final DealRequestLocationDetail locationDetail;
+        private final LocalDateTime sendTime;
         private final String itemBuyerId;
     }
 

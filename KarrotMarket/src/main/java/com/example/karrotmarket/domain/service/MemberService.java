@@ -8,12 +8,10 @@ import com.example.karrotmarket.domain.controller.dto.res.ShowAllItemsResponse;
 import com.example.karrotmarket.domain.entity.*;
 import com.example.karrotmarket.domain.facade.MemberFacade;
 import com.example.karrotmarket.domain.repository.ItemRepository;
-import com.example.karrotmarket.domain.repository.MemberRepository;
 import com.example.karrotmarket.global.exception.CannotTurnUpException;
 import com.example.karrotmarket.global.exception.DealRequestNotFound;
 import com.example.karrotmarket.domain.repository.DealRequestRepository;
 import com.example.karrotmarket.global.exception.ItemNotExistsException;
-import com.example.karrotmarket.global.exception.NoAuthorityException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
@@ -32,21 +30,8 @@ public class MemberService {
     @Transactional(readOnly = true)
     public MyPageResponse my() {
         Member currentMember = memberFacade.getCurrentMember();
-        List<MyPageResponse.DealRequestResponse> outGoingDealRequests = currentMember.getDealRequests()
-                .stream().map(
-                        this::toDealRequestResponse
-                ).collect(Collectors.toList());
-        List<MyPageResponse.ItemResponse> memberItems = currentMember.getItems().stream().map(
-                item -> MyPageResponse.ItemResponse.builder()
-                        .itemId(item.getId())
-                        .itemName(item.getItemName())
-                        .itemDescription(item.getItemDescription())
-                        .createdAt(item.getCreatedAt())
-                        .canNego(item.isNegotiable())
-                        .price(item.getPrice())
-                        .itemStatus(item.getItemStatus())
-                        .build()
-        ).collect(Collectors.toList());
+        List<MyPageResponse.DealRequestResponse> outGoingDealRequests = memberFacade.findMemberDealRequests(currentMember);
+        List<MyPageResponse.ItemResponse> memberItems = memberFacade.findMemberItems(currentMember);
         return MyPageResponse.builder()
                 .memberId(currentMember.getMemberId())
                 .memberName(currentMember.getMemberName())
@@ -55,14 +40,14 @@ public class MemberService {
                 .outGoingDealRequests(outGoingDealRequests)
                 .build();
     }
-
+    @Transactional(readOnly = true)
     public List<MyPageResponse.DealRequestResponse> inComingDealRequests() {
         Member currentMember = memberFacade.getCurrentMember();
-        return dealRequestRepository.findAllByItemOwner(currentMember.getMemberId()).stream()
+        return dealRequestRepository.findAllByItemOwnerOrderBySendTimeDesc(currentMember.getMemberId()).stream()
                 .map(this::toDealRequestResponse)
                 .collect(Collectors.toList());
     }
-
+    @Transactional
     public MessageResponse acceptDealRequest(Long dealRequestId) {
         DealRequest dealRequest = dealRequestRepository.findById(dealRequestId)
                 .orElseThrow(DealRequestNotFound::new);
@@ -72,17 +57,18 @@ public class MemberService {
         dealRequestRepository.delete(dealRequest);
         return new MessageResponse("거래 요청이 수락되었습니다.");
     }
+    @Transactional
     public MessageResponse denyDealRequest(Long dealRequestId) {
         dealRequestRepository.deleteById(dealRequestId);
         return new MessageResponse("거래 요청이 거절되었습니다.");
     }
-
+    @Transactional
     @CacheEvict(value = "items", allEntries = true, cacheManager = "karrotCacheManager")
     public MessageResponse turnUpItem(Long itemId) {
         Member currentMember = memberFacade.getCurrentMember();
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(ItemNotExistsException::new);
-        validateUser(item, currentMember);
+        memberFacade.validateUser(item, currentMember);
         if (LocalDateTime.now().minusDays(1L).isBefore(item.getCreatedAt())) {
             throw new CannotTurnUpException();
         }
@@ -90,7 +76,7 @@ public class MemberService {
         itemRepository.save(item);
         return new MessageResponse("상품 끌올 성공");
     }
-
+    @Transactional(readOnly = true)
     public List<ShowAllItemsResponse> bookMark() {
         Member currentMember = memberFacade.getCurrentMember();
         return currentMember.getHearts().stream()
@@ -106,31 +92,30 @@ public class MemberService {
                 ).collect(Collectors.toList());
     }
 
-    private MyPageResponse.DealRequestResponse toDealRequestResponse(DealRequest d) {
-        return MyPageResponse.DealRequestResponse.builder()
-                .itemId(d.getItem().getId())
-                .itemBuyerId(d.getItemBuyer().getMemberId())
-                .price(d.getPrice())
-                .itemStatus(d.getItem().getItemStatus())
-                .locationDetail(d.getLocationDetail())
-                .timeDetail(d.getTimeDetail())
-                .build();
-    }
+    @Transactional
     @CacheEvict(value = "items", allEntries = true, cacheManager = "karrotCacheManager")
     public MessageResponse modifyItem(Long itemId, ModifyItemRequest req) {
         Member currentMember = memberFacade.getCurrentMember();
         Item item = itemRepository.findById(itemId)
                         .orElseThrow(ItemNotExistsException :: new);
-        validateUser(item, currentMember);
+        memberFacade.validateUser(item, currentMember);
 
         item.modifyItemInfo(req);
         itemRepository.save(item);
         return new MessageResponse("상품 정보 변경 완료");
     }
 
-    private void validateUser(Item item, Member member) {
-        if(item.getMember() != member) {
-            throw new NoAuthorityException();
-        }
+    private MyPageResponse.DealRequestResponse toDealRequestResponse(DealRequest d) {
+        return MyPageResponse.DealRequestResponse.builder()
+                .itemId(d.getItem().getId())
+                .itemBuyerId(d.getItemBuyer().getMemberId())
+                .price(d.getPrice())
+                .sendTime(d.getSendTime())
+                .itemStatus(d.getItem().getItemStatus())
+                .locationDetail(d.getLocationDetail())
+                .timeDetail(d.getTimeDetail())
+                .build();
     }
+
+
 }

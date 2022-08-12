@@ -78,8 +78,8 @@ public class ItemService {
     @Transactional
     @Cacheable(value = "userItem", key = "#itemId")
     public ItemDetailResponse itemDetail(Long itemId) {
-        final Member member = memberFacade.getCurrentMember();
-        final Item item = itemRepository.findById(itemId)
+        Member member = memberFacade.getCurrentMember();
+        Item item = itemRepository.findById(itemId)
                 .orElseThrow(ItemNotExistsException::new);
         item.addViewCount();
         return ItemDetailResponse.builder()

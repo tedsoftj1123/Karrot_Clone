@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -24,6 +25,8 @@ public class DealRequest {
 
     @Embedded
     private DealRequestLocationDetail locationDetail;
+
+    private LocalDateTime sendTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
