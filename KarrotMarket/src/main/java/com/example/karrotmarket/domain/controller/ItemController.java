@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/item")
+@RequestMapping("/items")
 public class ItemController {
     private final ItemService itemService;
     private final MemberFacade memberFacade;

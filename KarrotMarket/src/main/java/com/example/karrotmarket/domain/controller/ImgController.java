@@ -14,13 +14,13 @@ import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/item")
+@RequestMapping("/items")
 public class ImgController {
 
     private final ImgService imgService;
     @PostMapping("/upload-img")
     public void upload(@RequestParam("image") MultipartFile file, @RequestParam String itemName) {
-        imgService.storeImg(file, itemName+file.getName());
+        imgService.storeImg(file, itemName+".png");
     }
 
     @GetMapping("/download-img")
