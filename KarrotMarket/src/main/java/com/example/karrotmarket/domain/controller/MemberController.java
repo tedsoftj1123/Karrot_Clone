@@ -47,4 +47,14 @@ public class MemberController {
     public MessageResponse modifyItem(@PathVariable Long itemId, @RequestBody ModifyItemRequest req) {
         return memberService.modifyItem(itemId, req);
     }
+
+    @GetMapping("/my/items/comp")
+    public List<ShowAllItemsResponse> completedItems() {
+        return memberService.completedItems();
+    }
+
+    @PatchMapping("/my/items/comp/{itemId}")
+    public MessageResponse completeDeal(@PathVariable Long itemId) {
+        return memberService.completeDeal(itemId);
+    }
 }

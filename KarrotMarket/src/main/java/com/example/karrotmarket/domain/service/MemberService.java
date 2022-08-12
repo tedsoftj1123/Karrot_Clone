@@ -117,5 +117,28 @@ public class MemberService {
                 .build();
     }
 
+    public List<ShowAllItemsResponse> completedItems() {
+        Member member = memberFacade.getCurrentMember();
+        return member.getItems().stream()
+                .filter(i -> i.getItemStatus().equals(ItemStatus.COMP)).map(item -> ShowAllItemsResponse.builder()
+                        .itemId(item.getId())
+                        .itemName(item.getItemName())
+                        .createdAt(item.getCreatedAt())
+                        .location(item.getMember().getAddress().getDong())
+                        .price(item.getPrice())
+                        .likeCount(item.getLikeCount().size())
+                        .build()
+                ).collect(Collectors.toList());
+    }
+
+    public MessageResponse completeDeal(Long itemId) {
+        Member member = memberFacade.getCurrentMember();
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(ItemNotExistsException::new);
+        memberFacade.validateUser(item, member);
+        item.changeItemStatus(ItemStatus.COMP);
+        itemRepository.save(item);
+        return new MessageResponse(item.getItemName() + "삼품의 거래가 완료되었습니다.");
+    }
 
 }
