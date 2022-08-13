@@ -78,7 +78,7 @@ public class ItemService {
         ).collect(Collectors.toList());
     }
     @Transactional
-    /*@Cacheable(value = "ItemDetailResponse", key = "#itemId")*/
+    /*@Cacheable(value = "items", key = "#itemId")*/
     public ItemDetailResponse itemDetail(Long itemId) {
         Member member = memberFacade.getCurrentMember();
         Item item = itemRepository.findById(itemId)

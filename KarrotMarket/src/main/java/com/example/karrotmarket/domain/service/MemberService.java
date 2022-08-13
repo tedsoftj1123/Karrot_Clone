@@ -84,7 +84,6 @@ public class MemberService {
             throw new CannotTurnUpException();
         }
         item.changeItemCreatedAt();
-        itemRepository.save(item);
         return new MessageResponse("상품 끌올 성공");
     }
     @Transactional(readOnly = true)
@@ -112,7 +111,6 @@ public class MemberService {
         memberFacade.validateUser(item, currentMember);
 
         item.modifyItemInfo(req);
-        itemRepository.save(item);
         return new MessageResponse("상품 정보 변경 완료");
     }
 
@@ -151,7 +149,6 @@ public class MemberService {
         memberFacade.validateUser(item, member);
         item.changeItemStatus(ItemStatus.COMP);
         dealRequestRepository.deleteAllByItem(item);
-        itemRepository.save(item);
         return new MessageResponse(item.getItemName() + "삼품의 거래가 완료되었습니다.");
     }
 
