@@ -12,49 +12,50 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/my")
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
 
-    @GetMapping("/my")
+    @GetMapping
     public MyPageResponse myPage() {
         return memberService.my();
     } // 내가 보낸 거래요청조회
 
-    @GetMapping("/my/deal-requests")
+    @GetMapping("/deal-requests")
     public List<InComingDealRequestResponse> inComingDealRequests() {
         return memberService.inComingDealRequests(); // 내가 받은 거래요청 조회
     }
-    @PatchMapping("/my/deal-requests/{dealRequestId}")
+    @PatchMapping("/deal-requests/{dealRequestId}")
     public MessageResponse acceptDealRequest(@PathVariable Long dealRequestId) {
         return memberService.acceptDealRequest(dealRequestId);
     }
-    @DeleteMapping("/my/deal-requests/{dealRequestId}")
+    @DeleteMapping("/deal-requests/{dealRequestId}")
     public MessageResponse denyDealRequest(@PathVariable Long dealRequestId) {
         return memberService.denyDealRequest(dealRequestId);
     }
 
-    @PatchMapping("/my/items/{itemId}")
+    @PatchMapping("/items/{itemId}")
     public MessageResponse turnUpItem(@PathVariable Long itemId) {
         return memberService.turnUpItem(itemId);
     }
 
-    @GetMapping("/my/hearts")
+    @GetMapping("/hearts")
     public List<ShowAllItemsResponse> bookMark() {
         return memberService.bookMark();
     }
 
-    @PutMapping("/my/items/{itemId}")
+    @PutMapping("/items/{itemId}")
     public MessageResponse modifyItem(@PathVariable Long itemId, @RequestBody ModifyItemRequest req) {
         return memberService.modifyItem(itemId, req);
     }
 
-    @GetMapping("/my/items/comp")
+    @GetMapping("/items/comp")
     public List<ShowAllItemsResponse> completedItems() {
         return memberService.completedItems();
     }
 
-    @PatchMapping("/my/items/comp/{itemId}")
+    @PatchMapping("/items/comp/{itemId}")
     public MessageResponse completeDeal(@PathVariable Long itemId) {
         return memberService.completeDeal(itemId);
     }

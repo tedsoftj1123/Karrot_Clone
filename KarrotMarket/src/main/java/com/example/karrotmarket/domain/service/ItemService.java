@@ -34,9 +34,8 @@ public class ItemService {
     @Transactional
     @CacheEvict(value = "items", allEntries = true)
     public AddItemResponse addItem(ItemRequest req) {
-        System.out.println(req.isNegotiable());
         Member currentMember = memberFacade.getCurrentMember();
-        Item item = itemRepository.save(
+        itemRepository.save(
                 Item.builder()
                         .itemName(req.getItemName())
                         .category(req.getItemCategory())
@@ -49,11 +48,6 @@ public class ItemService {
                         .member(currentMember)
                         .build()
         );
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/items/download-img")
-                .path("/"+item.getId())
-                .toUriString();
-        item.setItemImgUrl(fileDownloadUri);
         return AddItemResponse.builder()
                 .itemName(req.getItemName())
                 .memberName(currentMember.getMemberName())
