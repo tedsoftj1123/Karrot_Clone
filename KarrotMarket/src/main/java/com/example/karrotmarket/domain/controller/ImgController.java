@@ -18,14 +18,14 @@ import java.io.IOException;
 public class ImgController {
 
     private final ImgService imgService;
-    @PostMapping("/upload-img")
-    public void upload(@RequestParam("image") MultipartFile file, @RequestParam String itemName) {
-        imgService.storeImg(file, itemName+".png");
+    @PostMapping("/upload-img/{itemId}")
+    public void upload(@RequestParam("image") MultipartFile file, @PathVariable Long itemId) {
+        imgService.storeImg(file, itemId+".png");
     }
 
-    @GetMapping("/download-img")
-    public ResponseEntity<?> downloadFile(@RequestParam String fileName, HttpServletRequest request) {
-        Resource resource = imgService.loadFileAsResource(fileName+".png");
+    @GetMapping("/download-img/{itemId}")
+    public ResponseEntity<?> downloadFile(@PathVariable Long itemId, HttpServletRequest request) {
+        Resource resource = imgService.loadFileAsResource(itemId+".png");
 
         String contentType = null;
         try {

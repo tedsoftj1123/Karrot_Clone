@@ -66,6 +66,10 @@ public class Item {
         this.itemDescription = changeInfo.getItemDescription();
         this.category = changeInfo.getItemCategory();
         this.price = changeInfo.getItemPrice();
-        this.negotiable = changeInfo.isItemNegotiable();
+        this.negotiable = changeInfo.isNegotiable();
+    }
+
+    public void setItemImgUrl(String url) {
+        this.itemImgUrl = url;
     }
 }

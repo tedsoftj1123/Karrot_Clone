@@ -30,14 +30,13 @@ public class MyPageResponse {
         private final DealRequestTimeDetail timeDetail;
         private final DealRequestLocationDetail locationDetail;
         private final LocalDateTime sendTime;
-        private final String itemBuyerId;
+        private final String itemOwnerId;
     }
 
     @Builder @Getter
     public static class ItemResponse {
         private Long itemId;
         private String itemName;
-        private String itemDescription;
         private LocalDateTime createdAt;
         private int price;
         private boolean canNego;

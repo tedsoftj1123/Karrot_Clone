@@ -2,6 +2,7 @@ package com.example.karrotmarket.domain.service;
 
 
 import com.example.karrotmarket.domain.controller.dto.req.ModifyItemRequest;
+import com.example.karrotmarket.domain.controller.dto.res.InComingDealRequestResponse;
 import com.example.karrotmarket.domain.controller.dto.res.MessageResponse;
 import com.example.karrotmarket.domain.controller.dto.res.MyPageResponse;
 import com.example.karrotmarket.domain.controller.dto.res.ShowAllItemsResponse;
@@ -12,6 +13,7 @@ import com.example.karrotmarket.global.exception.CannotTurnUpException;
 import com.example.karrotmarket.global.exception.DealRequestNotFound;
 import com.example.karrotmarket.domain.repository.DealRequestRepository;
 import com.example.karrotmarket.global.exception.ItemNotExistsException;
+import com.example.karrotmarket.global.exception.NoAuthorityException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
@@ -41,7 +43,7 @@ public class MemberService {
                 .build();
     }
     @Transactional(readOnly = true)
-    public List<MyPageResponse.DealRequestResponse> inComingDealRequests() {
+    public List<InComingDealRequestResponse> inComingDealRequests() {
         Member currentMember = memberFacade.getCurrentMember();
         return dealRequestRepository.findAllByItemOwnerOrderBySendTimeDesc(currentMember.getMemberId()).stream()
                 .map(this::toDealRequestResponse)
@@ -49,16 +51,25 @@ public class MemberService {
     }
     @Transactional
     public MessageResponse acceptDealRequest(Long dealRequestId) {
+        Member currentMember = memberFacade.getCurrentMember();
         DealRequest dealRequest = dealRequestRepository.findById(dealRequestId)
                 .orElseThrow(DealRequestNotFound::new);
+        if(!dealRequest.getItemOwner().equals(currentMember.getMemberId())) {
+            throw new NoAuthorityException();
+        }
         Item item = itemRepository.findById(dealRequest.getItem().getId()).orElseThrow(ItemNotExistsException::new);
         dealRequest.toAccepted();
         item.changeItemStatus(ItemStatus.RESERVE);
-        dealRequestRepository.delete(dealRequest);
         return new MessageResponse("거래 요청이 수락되었습니다.");
     }
     @Transactional
     public MessageResponse denyDealRequest(Long dealRequestId) {
+        Member currentMember = memberFacade.getCurrentMember();
+        DealRequest dealRequest = dealRequestRepository.findById(dealRequestId)
+                        .orElseThrow(DealRequestNotFound::new);
+        if(!dealRequest.getItemOwner().equals(currentMember.getMemberId())) {
+            throw new NoAuthorityException();
+        }
         dealRequestRepository.deleteById(dealRequestId);
         return new MessageResponse("거래 요청이 거절되었습니다.");
     }
@@ -105,9 +116,10 @@ public class MemberService {
         return new MessageResponse("상품 정보 변경 완료");
     }
 
-    private MyPageResponse.DealRequestResponse toDealRequestResponse(DealRequest d) {
-        return MyPageResponse.DealRequestResponse.builder()
+    private InComingDealRequestResponse toDealRequestResponse(DealRequest d) {
+        return InComingDealRequestResponse.builder()
                 .itemId(d.getItem().getId())
+                .dealRequestId(d.getId())
                 .itemBuyerId(d.getItemBuyer().getMemberId())
                 .price(d.getPrice())
                 .sendTime(d.getSendTime())
@@ -116,11 +128,12 @@ public class MemberService {
                 .timeDetail(d.getTimeDetail())
                 .build();
     }
-
+    @Transactional(readOnly = true)
     public List<ShowAllItemsResponse> completedItems() {
         Member member = memberFacade.getCurrentMember();
         return member.getItems().stream()
-                .filter(i -> i.getItemStatus().equals(ItemStatus.COMP)).map(item -> ShowAllItemsResponse.builder()
+                .filter(i -> i.getItemStatus().equals(ItemStatus.COMP))
+                .map(item -> ShowAllItemsResponse.builder()
                         .itemId(item.getId())
                         .itemName(item.getItemName())
                         .createdAt(item.getCreatedAt())
@@ -130,13 +143,14 @@ public class MemberService {
                         .build()
                 ).collect(Collectors.toList());
     }
-
+    @Transactional
     public MessageResponse completeDeal(Long itemId) {
         Member member = memberFacade.getCurrentMember();
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(ItemNotExistsException::new);
         memberFacade.validateUser(item, member);
         item.changeItemStatus(ItemStatus.COMP);
+        dealRequestRepository.deleteAllByItem(item);
         itemRepository.save(item);
         return new MessageResponse(item.getItemName() + "삼품의 거래가 완료되었습니다.");
     }

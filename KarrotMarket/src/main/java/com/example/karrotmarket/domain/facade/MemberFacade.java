@@ -2,6 +2,7 @@ package com.example.karrotmarket.domain.facade;
 
 import com.example.karrotmarket.domain.controller.dto.res.MyPageResponse;
 import com.example.karrotmarket.domain.entity.Item;
+import com.example.karrotmarket.domain.entity.ItemStatus;
 import com.example.karrotmarket.domain.entity.Member;
 import com.example.karrotmarket.global.exception.NoAuthorityException;
 import com.example.karrotmarket.global.exception.NonLoginException;
@@ -34,11 +35,12 @@ public class MemberFacade {
     }
 
     public List<MyPageResponse.ItemResponse> findMemberItems(Member currentMember) {
-        return currentMember.getItems().stream().map(
+        return currentMember.getItems().stream()
+                .filter(i -> i.getItemStatus()!= ItemStatus.COMP)
+                .map(
                 item -> MyPageResponse.ItemResponse.builder()
                         .itemId(item.getId())
                         .itemName(item.getItemName())
-                        .itemDescription(item.getItemDescription())
                         .createdAt(item.getCreatedAt())
                         .canNego(item.isNegotiable())
                         .price(item.getPrice())
@@ -52,7 +54,7 @@ public class MemberFacade {
                 .stream().map(
                         d -> MyPageResponse.DealRequestResponse.builder()
                                 .itemId(d.getItem().getId())
-                                .itemBuyerId(d.getItemBuyer().getMemberId())
+                                .itemOwnerId(d.getItemOwner())
                                 .sendTime(d.getSendTime())
                                 .price(d.getPrice())
                                 .itemStatus(d.getItem().getItemStatus())

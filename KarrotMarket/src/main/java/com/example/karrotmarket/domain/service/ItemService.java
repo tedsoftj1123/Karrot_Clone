@@ -36,23 +36,24 @@ public class ItemService {
     public AddItemResponse addItem(ItemRequest req) {
         System.out.println(req.isNegotiable());
         Member currentMember = memberFacade.getCurrentMember();
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/items/download-img")
-                .queryParam("fileName", req.getItemName())
-                .toUriString();
-        itemRepository.save(
+        Item item = itemRepository.save(
                 Item.builder()
                         .itemName(req.getItemName())
                         .category(req.getItemCategory())
-                        .itemImgUrl(fileDownloadUri)
                         .itemDescription(req.getItemDescription())
                         .negotiable(req.isNegotiable())
                         .itemStatus(ItemStatus.SALE)
                         .createdAt(LocalDateTime.now())
+                        .itemImgUrl("noUrl")
                         .price(req.getItemPrice())
                         .member(currentMember)
                         .build()
         );
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/items/download-img")
+                .path("/"+item.getId())
+                .toUriString();
+        item.setItemImgUrl(fileDownloadUri);
         return AddItemResponse.builder()
                 .itemName(req.getItemName())
                 .memberName(currentMember.getMemberName())
@@ -77,7 +78,7 @@ public class ItemService {
         ).collect(Collectors.toList());
     }
     @Transactional
-    @Cacheable(value = "itemDetail", key = "#itemId")
+    /*@Cacheable(value = "ItemDetailResponse", key = "#itemId")*/
     public ItemDetailResponse itemDetail(Long itemId) {
         Member member = memberFacade.getCurrentMember();
         Item item = itemRepository.findById(itemId)

@@ -10,7 +10,7 @@ import javax.validation.constraints.*;
 @NoArgsConstructor
 public class ItemRequest {
     @NotEmpty(message = "물품이름을 입력해주세요")
-    @Size(max = 10, message = "물품이름은 10글자보다 길어선 안됩니다.")
+    @Size(max = 20, message = "물품이름은 10글자보다 길어선 안됩니다.")
     private String itemName;
     @NotEmpty
     @Size(min = 10, max = 100, message = "물품 설명은 10글자보다 길고, 100글자보다 짧아야 합니다.")

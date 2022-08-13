@@ -11,4 +11,6 @@ public interface DealRequestRepository extends JpaRepository<DealRequest, Long> 
     List<DealRequest> findAllByItemOwnerOrderBySendTimeDesc(String ownerId);
 
     boolean existsByItemBuyerAndItem(Member member, Item item);
+
+    void deleteAllByItem(Item item);
 }

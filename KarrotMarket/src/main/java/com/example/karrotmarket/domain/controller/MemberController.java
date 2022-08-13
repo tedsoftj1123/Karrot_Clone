@@ -1,6 +1,7 @@
 package com.example.karrotmarket.domain.controller;
 
 import com.example.karrotmarket.domain.controller.dto.req.ModifyItemRequest;
+import com.example.karrotmarket.domain.controller.dto.res.InComingDealRequestResponse;
 import com.example.karrotmarket.domain.controller.dto.res.MessageResponse;
 import com.example.karrotmarket.domain.controller.dto.res.MyPageResponse;
 import com.example.karrotmarket.domain.controller.dto.res.ShowAllItemsResponse;
@@ -21,7 +22,7 @@ public class MemberController {
     } // 내가 보낸 거래요청조회
 
     @GetMapping("/my/deal-requests")
-    public List<MyPageResponse.DealRequestResponse> inComingDealRequests() {
+    public List<InComingDealRequestResponse> inComingDealRequests() {
         return memberService.inComingDealRequests(); // 내가 받은 거래요청 조회
     }
     @PatchMapping("/my/deal-requests/{dealRequestId}")
