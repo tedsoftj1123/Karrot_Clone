@@ -7,6 +7,7 @@ import com.example.karrotmarket.domain.controller.dto.res.MyPageResponse;
 import com.example.karrotmarket.domain.controller.dto.res.ShowAllItemsResponse;
 import com.example.karrotmarket.domain.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class MemberController {
         return memberService.acceptDealRequest(dealRequestId);
     }
     @DeleteMapping("/deal-requests/{dealRequestId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public MessageResponse denyDealRequest(@PathVariable Long dealRequestId) {
         return memberService.denyDealRequest(dealRequestId);
     }

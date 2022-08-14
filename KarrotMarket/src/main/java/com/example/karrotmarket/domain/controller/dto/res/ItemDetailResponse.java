@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 
 
 @Builder @Getter
-@AllArgsConstructor
-@NoArgsConstructor
 public class ItemDetailResponse {
     private String memberName;
     private String memberLocation;
