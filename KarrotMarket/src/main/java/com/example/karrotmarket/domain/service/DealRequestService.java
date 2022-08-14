@@ -36,7 +36,6 @@ public class DealRequestService {
         if(!item.isNegotiable() && req.getPrice()!=item.getPrice()){
             throw new CannotNegoException();
         }
-        System.out.println(req.getLocationDetail().getDong());
         dealRequestRepository.save(
                 DealRequest.builder()
                         .item(item)

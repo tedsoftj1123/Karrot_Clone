@@ -50,6 +50,7 @@ public class MemberService {
                 .collect(Collectors.toList());
     }
     @Transactional
+    @CacheEvict(value = "items", allEntries = true)
     public MessageResponse acceptDealRequest(Long dealRequestId) {
         Member currentMember = memberFacade.getCurrentMember();
         DealRequest dealRequest = dealRequestRepository.findById(dealRequestId)

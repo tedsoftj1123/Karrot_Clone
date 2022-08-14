@@ -54,7 +54,7 @@ public class ItemService {
                 .build();
     }
 
-    @Cacheable(value = "items", key = "#currentMember.address.city")
+    @Cacheable(value = "items", key = "#currentMember.address.city", cacheManager = "karrotCacheManager")
     public List<ShowAllItemsResponse> main(Member currentMember) {
 
         return itemRepository.findAllByOrderByCreatedAtDesc().stream()
@@ -72,7 +72,6 @@ public class ItemService {
         ).collect(Collectors.toList());
     }
     @Transactional
-    /*@Cacheable(value = "items", key = "#itemId")*/
     public ItemDetailResponse itemDetail(Long itemId) {
         Member member = memberFacade.getCurrentMember();
         Item item = itemRepository.findById(itemId)

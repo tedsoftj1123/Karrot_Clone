@@ -24,14 +24,14 @@ public class ImgController {
     }
 
     @GetMapping("/download-img/{itemId}")
-    public ResponseEntity<?> downloadFile(@PathVariable Long itemId, HttpServletRequest request) {
+    public ResponseEntity<Resource> downloadFile(@PathVariable Long itemId, HttpServletRequest request) {
         Resource resource = imgService.loadFileAsResource(itemId+".png");
 
         String contentType = null;
         try {
             contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
         } catch (IOException ex) {
-            System.out.println("a");
+            System.out.println("I/O error");
         }
 
         if(contentType == null) {
@@ -39,7 +39,7 @@ public class ImgController {
         }
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
     }
 }
