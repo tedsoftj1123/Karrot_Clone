@@ -76,8 +76,8 @@ public class JwtTokenProvider {
 
     public boolean validateAccessToken(String jwtToken) {
         try {
-            Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(jwtProperties.getSecretKey()).build().parseClaimsJws(jwtToken);
-            return !claims.getBody().getExpiration().before(new Date());
+            Jwts.parserBuilder().setSigningKey(jwtProperties.getSecretKey()).build().parseClaimsJws(jwtToken);
+            return true;
         } catch (io.jsonwebtoken.ExpiredJwtException e) {
             throw new com.example.karrotmarket.global.exception.ExpiredJwtException();
         } catch (Exception e) {

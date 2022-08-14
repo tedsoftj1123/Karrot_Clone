@@ -1,6 +1,5 @@
 package com.example.karrotmarket.global.security.jwt;
 
-import com.example.karrotmarket.global.exception.InvalidJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,7 +19,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         String bearer = jwtTokenProvider.resolveToken(request);
-        System.out.println(bearer);
         if (bearer != null && jwtTokenProvider.validateAccessToken(bearer)) {
             Authentication authentication = jwtTokenProvider.getAuthentication(bearer);
             SecurityContextHolder.getContext().setAuthentication(authentication);
