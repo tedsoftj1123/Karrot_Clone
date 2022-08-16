@@ -23,7 +23,7 @@ public class Member {
     @Size(max = 5)
     private String memberName;
 
-    @Size(min = 5, max = 80)
+    @Size(max = 60)
     private String memberPassword;
 
     @Embedded
