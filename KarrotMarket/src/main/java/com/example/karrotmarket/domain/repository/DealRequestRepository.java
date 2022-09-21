@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
+
 public interface DealRequestRepository extends JpaRepository<DealRequest, Long> {
     List<DealRequest> findAllByItemOwnerOrderBySendTimeDesc(String ownerId);
 

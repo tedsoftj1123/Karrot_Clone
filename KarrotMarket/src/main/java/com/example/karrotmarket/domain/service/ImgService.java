@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Objects;
 
 @Service
 public class ImgService {
@@ -29,7 +30,7 @@ public class ImgService {
     private final MemberFacade memberFacade;
     private final ItemRepository itemRepository;
 
-    @Autowired
+
     public ImgService(FileUploadProperties fileUploadProperties, MemberFacade memberFacade, ItemRepository itemRepository) {
         this.fileStoreLocation = Paths.get(fileUploadProperties.getFileUploadLocation())
                 .toAbsolutePath().normalize();
@@ -44,9 +45,10 @@ public class ImgService {
     @Transactional
     public void storeImg(MultipartFile file, Long itemId) {
         Member currentMember = memberFacade.getCurrentMember();
+        System.out.println();
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(ItemNotExistsException::new);
-        String fileName = itemId+".png";
+        String fileName = itemId+Objects.requireNonNull(file.getContentType()).substring(6);
         memberFacade.validateUser(item, currentMember);
         item.setItemImgUrl(ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/items/download-img")

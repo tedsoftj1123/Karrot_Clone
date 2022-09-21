@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
 @RequiredArgsConstructor
+@Component
 public class MemberFacade {
     private final MemberRepository memberRepository;
 

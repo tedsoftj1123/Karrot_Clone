@@ -7,12 +7,11 @@ import com.example.karrotmarket.domain.entity.ItemStatus;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter @Builder
-public class MyPageResponse {
+public class  MyPageResponse {
     private final String memberId;
 
     private final String memberName;
