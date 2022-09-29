@@ -1,5 +1,6 @@
 package com.example.karrotmarket.domain.entity;
 
+import com.example.karrotmarket.domain.user.domain.type.Address;
 import lombok.*;
 
 import javax.persistence.*;
