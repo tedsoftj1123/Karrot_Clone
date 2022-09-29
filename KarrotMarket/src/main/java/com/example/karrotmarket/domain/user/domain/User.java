@@ -19,11 +19,11 @@ public class User {
     private Long id;
 
     @NotNull
-    @Column(columnDefinition = "varchar(20)", unique = true)
+    @Column(length = 20, unique = true)
     private String accountId;
 
     @NotNull
-    @Column(columnDefinition = "varchar(30)", unique = true)
+    @Column(length = 30, unique = true)
     private String accountEmail;
 
     @Embedded
