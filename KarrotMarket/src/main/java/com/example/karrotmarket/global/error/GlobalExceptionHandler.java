@@ -1,6 +1,6 @@
 package com.example.karrotmarket.global.error;
 
-import com.example.karrotmarket.global.error.exception.BaseException;
+import com.example.karrotmarket.global.error.exception.KarrotException;
 import com.example.karrotmarket.global.error.exception.ErrorCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
-    private ResponseEntity<ErrorResponse> handleException(BaseException e) {
+    private ResponseEntity<ErrorResponse> handleException(KarrotException e) {
         final ErrorCode errorCode = e.getErrorCode();
         return new ResponseEntity<>(
                 ErrorResponse.builder()

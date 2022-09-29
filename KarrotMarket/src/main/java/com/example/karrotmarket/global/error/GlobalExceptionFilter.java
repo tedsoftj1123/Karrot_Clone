@@ -1,6 +1,6 @@
 package com.example.karrotmarket.global.error;
 
-import com.example.karrotmarket.global.error.exception.BaseException;
+import com.example.karrotmarket.global.error.exception.KarrotException;
 import com.example.karrotmarket.global.error.exception.ErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class GlobalExceptionFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             filterChain.doFilter(request, response);
-        } catch (BaseException e) {
+        } catch (KarrotException e) {
             ErrorCode errorCode = e.getErrorCode();
 
             response.setStatus(errorCode.getStatus());
