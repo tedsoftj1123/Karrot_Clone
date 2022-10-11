@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class BaseException extends RuntimeException{
+public class KarrotException extends RuntimeException{
     private final ErrorCode errorCode;
 }

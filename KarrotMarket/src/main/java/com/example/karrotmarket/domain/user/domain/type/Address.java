@@ -1,22 +1,22 @@
-package com.example.karrotmarket.domain.entity;
+package com.example.karrotmarket.domain.user.domain.type;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 @Embeddable
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Address {
-
-    @NotBlank(message = "도시를 입력해주세요")
+    @Column(length = 8)
     private String city;
-    @NotBlank(message = "동을 입력해주세요")
+    @Column(length = 10)
     private String dong;
 }
