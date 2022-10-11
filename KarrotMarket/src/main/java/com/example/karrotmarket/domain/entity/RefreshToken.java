@@ -19,7 +19,7 @@ public class RefreshToken {
     @Column(name = "refresh_val")
     private String value;
 
-    public void updateValue(String token) {
+    public void updateValue(String token)d {
         this.value = token;
     }
 }

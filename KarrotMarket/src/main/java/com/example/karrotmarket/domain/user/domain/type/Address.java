@@ -15,7 +15,6 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Address {
-
     @Column(length = 8)
     private String city;
     @Column(length = 10)

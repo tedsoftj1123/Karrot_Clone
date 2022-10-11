@@ -1,6 +1,6 @@
 package com.example.karrotmarket.domain.controller.dto.res;
 
-import com.example.karrotmarket.domain.entity.Address;
+import com.example.karrotmarket.domain.user.domain.type.Address;
 import com.example.karrotmarket.domain.entity.DealRequestLocationDetail;
 import com.example.karrotmarket.domain.entity.DealRequestTimeDetail;
 import com.example.karrotmarket.domain.entity.ItemStatus;
